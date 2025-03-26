@@ -1,0 +1,48 @@
+# 忽略Visual Studio临时文件
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 构建结果
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Quicker特有的临时文件
+*.log
+*.tmp
+
+# 本地历史文件
+.history/
+.ionide/
+
+# 日志文件
+*.log
+
+# 可能包含敏感信息的文件
+*credentials*
+*secret*
+*apikey*
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器备份文件
+*~
+*.bak
+*.swp 

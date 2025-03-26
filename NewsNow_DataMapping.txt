@@ -1,0 +1,23 @@
+// 当前选中的分类
+currentCategory:="hot"
+
+// 加载状态
+isLoading:=false
+
+// newsData字典，包含三个键：v2ex, weibo, ithome，每个键对应一个新闻项列表
+// 示例格式：
+// newsData:={
+//   "v2ex": [
+//     {"Title": "标题1", "Url": "http://example.com/1", "Time": "10:15"},
+//     {"Title": "标题2", "Url": "http://example.com/2", "Time": "11:30"}
+//   ],
+//   "weibo": [
+//     {"Title": "微博标题1", "Url": "http://example.com/weibo1", "Time": "09:45"},
+//     {"Title": "微博标题2", "Url": "http://example.com/weibo2", "Time": "12:20"}
+//   ],
+//   "ithome": [
+//     {"Title": "IT之家标题1", "Url": "http://example.com/it1", "Time": "08:30"},
+//     {"Title": "IT之家标题2", "Url": "http://example.com/it2", "Time": "13:10"}
+//   ]
+// }
+newsData:{newsData}
