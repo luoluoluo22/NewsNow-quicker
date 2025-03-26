@@ -1,0 +1,93 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 官方文档
+
+https://getquicker.net/KC/Help/Doc/csscript
+
+你是一个精通Quicker软件运行C#代码的专家。这个模块使用Roslyn引擎，支持较新的c#语法：
+
+注：
+
+编译c#时，会根据c#代码的内容生成程序集。内容相同，可以复用已有程序集，内容不同则会生成新的程序集。因此，c#代码应尽量保持不变，应该避免使用文本插值方式生成脚本代码。
+
+# 运行模式
+使用Roslyn引擎编译和执行c#脚本，支持较新的c#语法。整个Quicker中，第一次使用此模块编译(冷启动)需要耗费较长时间。程序集会被自动缓存。
+
+# 模块输入
+
+C#代码中必须包含一个Exec静态函数，接受IStepContext类型的参数，有或无返回值，参考如下示例：
+
+```cs
+// 引用必要的命名空间
+using System.Windows.Forms;
+
+// Quicker将会调用的函数
+public static void Exec(Quicker.Public.IStepContext context){
+  var oldValue = context.GetVarValue("varName");  // 读取动作里的变量值
+  MessageBox.Show(oldValue as string);
+  context.SetVarValue("varName", "从脚本输出的内容。"); // 向变量里输出值
+}
+```
+
+该方法可根据需要修改为带有返回值，并从【返回内容】输出参数中得到结果。
+```cs
+//.cs  文件类型，便于外部编辑时使用
+// 引用必要的命名空间
+using System.Windows.Forms;
+using System.Threading;
+
+// Quicker将会调用的函数。可以根据需要修改返回值类型。
+public static string Exec(Quicker.Public.IStepContext context)
+{	
+	// 获取当前线程的公寓状态
+	ApartmentState state = Thread.CurrentThread.GetApartmentState();
+
+	// 将公寓状态转换为字符串
+	string message = state == ApartmentState.STA ? "STA" : "MTA";
+
+	return message;
+}
+```
+【引用DLL库】脚本内容需要引用（reference）的其他.Net库文件的完整路径。 每行写一个。
+
+【允许缓存程序集】是否允许缓存代码编译后的程序集，以方便下次运行时直接加载程序集，提升启动速度。
+
+程序集缓存每次升级版本会丢弃。
+缓存目录为Windows临时文件目录。
+
+# 调用
+
+
+IStepContext 接口
+Exec函数需要接收一个IStepContext接口类型的参数，从而实现Quicker动作变量的读写。
+
+接口的声明如下：
+
+namespace Quicker.Public
+{
+    /// <summary>
+    /// 脚本参数接口
+    /// </summary>
+    public interface IStepContext
+    {
+        /// <summary>
+        /// 获取变量值
+        /// </summary>
+        /// <param name="varName">变量名</param>
+        /// <returns>返回的结果类型，根据需要进行类型转换。</returns>
+        object GetVarValue(string varName);
+
+        /// <summary>
+        /// 设置变量值
+        /// </summary>
+        /// <param name="varName">变量名</param>
+        /// <param name="value">值，需要根据变量的类型传入合适类型的值</param>
+        void SetVarValue(string varName, object value);
+    }
+}
+
+
+GetVarValue读取变量值，SetVarValue输出变量值。请在必要时进行类型转换。 词典，列表，不需要

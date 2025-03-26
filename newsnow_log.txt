@@ -269,3 +269,919 @@ Value (bool): False
 2025-03-26 19:27:32.184 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
 2025-03-26 19:27:33.293 - 延迟绑定的Border被点击
 2025-03-26 19:27:33.340 - URL已打开: https://v2ex.com/t/2
+============== OnWindowCreated - 2025-03-26 21:56:43 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: 呵呵
+    Value: [
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  },
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  }
+]
+    Key: column6Title
+    Value: [
+  {
+    "Title": "春节档电影票房突破50亿",
+    "Time": "15:30",
+    "Url": "https://weibo.com/1"
+  },
+  {
+    "Title": "新能源汽车销量同比增长150%",
+    "Time": "14:45",
+    "Url": "https://weibo.com/2"
+  },
+  {
+    "Title": "教育部发布2024年教育改革新政",
+    "Time": "13:50",
+    "Url": "https://weibo.com/3"
+  }
+]
+    Key: column3Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+    Key: column4Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowLoaded - 2025-03-26 21:56:43 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: 呵呵
+    Value: [
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  },
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  }
+]
+    Key: column6Title
+    Value: [
+  {
+    "Title": "春节档电影票房突破50亿",
+    "Time": "15:30",
+    "Url": "https://weibo.com/1"
+  },
+  {
+    "Title": "新能源汽车销量同比增长150%",
+    "Time": "14:45",
+    "Url": "https://weibo.com/2"
+  },
+  {
+    "Title": "教育部发布2024年教育改革新政",
+    "Time": "13:50",
+    "Url": "https://weibo.com/3"
+  }
+]
+    Key: column3Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+    Key: column4Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+2025-03-26 21:56:43.647 - 开始添加点击事件处理
+2025-03-26 21:56:43.647 - 找到ItemsControl: column1TitleItemsControl
+2025-03-26 21:56:43.649 - 在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column2TitleItemsControl
+2025-03-26 21:56:43.649 - 在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column3TitleItemsControl
+2025-03-26 21:56:43.649 - 在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column4TitleItemsControl
+2025-03-26 21:56:43.649 - 在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column5TitleItemsControl
+2025-03-26 21:56:43.649 - 在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column6TitleItemsControl
+2025-03-26 21:56:43.649 - 在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.649 - 找到ItemsControl: column7TitleItemsControl
+2025-03-26 21:56:43.650 - 在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.650 - 找到ItemsControl: column8TitleItemsControl
+2025-03-26 21:56:43.650 - 在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.650 - 找到ItemsControl: column9TitleItemsControl
+2025-03-26 21:56:43.650 - 在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.680 - 延迟执行点击事件绑定
+2025-03-26 21:56:43.680 - 延迟执行：在column1TitleItemsControl中找到 8 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column2TitleItemsControl中找到 3 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column3TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column4TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 21:56:43.681 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
+============== OnButtonClicked_CloseButton - 2025-03-26 21:56:46 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: 呵呵
+    Value: [
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  },
+  {
+    "Title": "为什么现在的年轻人都在追求 3555 岁退休？",
+    "Time": "15:48",
+    "Url": "https://v2ex.com/t/1"
+  },
+  {
+    "Title": "2024年 Web 开发技术栈选择建议",
+    "Time": "14:30",
+    "Url": "https://v2ex.com/t/2"
+  },
+  {
+    "Title": "远程工作两年后，我选择回归办公室",
+    "Time": "13:15",
+    "Url": "https://v2ex.com/t/3"
+  },
+  {
+    "Title": "分享一下我的副业收入之路",
+    "Time": "12:40",
+    "Url": "https://v2ex.com/t/4"
+  }
+]
+    Key: column6Title
+    Value: [
+  {
+    "Title": "春节档电影票房突破50亿",
+    "Time": "15:30",
+    "Url": "https://weibo.com/1"
+  },
+  {
+    "Title": "新能源汽车销量同比增长150%",
+    "Time": "14:45",
+    "Url": "https://weibo.com/2"
+  },
+  {
+    "Title": "教育部发布2024年教育改革新政",
+    "Time": "13:50",
+    "Url": "https://weibo.com/3"
+  }
+]
+    Key: column3Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+    Key: column4Title
+    Value: [
+  {
+    "Title": "微软发布 Windows 12 预览版",
+    "Time": "15:20",
+    "Url": "https://ithome.com/1"
+  },
+  {
+    "Title": "苹果 M3 Ultra 处理器跑分曝光",
+    "Time": "14:40",
+    "Url": "https://ithome.com/2"
+  },
+  {
+    "Title": "国产操作系统市占率突破15%",
+    "Time": "13:25",
+    "Url": "https://ithome.com/3"
+  },
+  {
+    "Title": "华为发布新一代折叠屏手机",
+    "Time": "12:10",
+    "Url": "https://ithome.com/4"
+  }
+]
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowCreated - 2025-03-26 22:13:02 ==============
+Key: newsData
+Value (Dictionary): Count = 0
+  Dictionary Contents:
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowLoaded - 2025-03-26 22:13:02 ==============
+Key: newsData
+Value (Dictionary): Count = 0
+  Dictionary Contents:
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+2025-03-26 22:13:02.218 - 开始添加点击事件处理
+2025-03-26 22:13:02.218 - 找到ItemsControl: column1TitleItemsControl
+2025-03-26 22:13:02.218 - 在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column2TitleItemsControl
+2025-03-26 22:13:02.218 - 在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column3TitleItemsControl
+2025-03-26 22:13:02.218 - 在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column4TitleItemsControl
+2025-03-26 22:13:02.218 - 在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column5TitleItemsControl
+2025-03-26 22:13:02.218 - 在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column6TitleItemsControl
+2025-03-26 22:13:02.218 - 在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.218 - 找到ItemsControl: column7TitleItemsControl
+2025-03-26 22:13:02.219 - 在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.219 - 找到ItemsControl: column8TitleItemsControl
+2025-03-26 22:13:02.219 - 在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.219 - 找到ItemsControl: column9TitleItemsControl
+2025-03-26 22:13:02.219 - 在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.237 - 延迟执行点击事件绑定
+2025-03-26 22:13:02.238 - 延迟执行：在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:13:02.238 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
+============== OnWindowCreated - 2025-03-26 22:18:08 ==============
+Key: newsData
+Value (Dictionary): Count = 0
+  Dictionary Contents:
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowLoaded - 2025-03-26 22:18:08 ==============
+Key: newsData
+Value (Dictionary): Count = 0
+  Dictionary Contents:
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+2025-03-26 22:18:08.776 - 开始添加点击事件处理
+2025-03-26 22:18:08.776 - 找到ItemsControl: column1TitleItemsControl
+2025-03-26 22:18:08.776 - 在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.776 - 找到ItemsControl: column2TitleItemsControl
+2025-03-26 22:18:08.776 - 在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.776 - 找到ItemsControl: column3TitleItemsControl
+2025-03-26 22:18:08.776 - 在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.776 - 找到ItemsControl: column4TitleItemsControl
+2025-03-26 22:18:08.777 - 在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.777 - 找到ItemsControl: column5TitleItemsControl
+2025-03-26 22:18:08.777 - 在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.777 - 找到ItemsControl: column6TitleItemsControl
+2025-03-26 22:18:08.777 - 在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.777 - 找到ItemsControl: column7TitleItemsControl
+2025-03-26 22:18:08.777 - 在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.777 - 找到ItemsControl: column8TitleItemsControl
+2025-03-26 22:18:08.777 - 在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.777 - 找到ItemsControl: column9TitleItemsControl
+2025-03-26 22:18:08.777 - 在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.806 - 延迟执行点击事件绑定
+2025-03-26 22:18:08.806 - 延迟执行：在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.806 - 延迟执行：在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.806 - 延迟执行：在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:18:08.807 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
+============== OnButtonClicked_CloseButton - 2025-03-26 22:18:13 ==============
+Key: newsData
+Value (Dictionary): Count = 0
+  Dictionary Contents:
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowCreated - 2025-03-26 22:20:48 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: V2EX热门
+    Value: [
+  {
+    "Title": "获取V2EX数据失败: 操作超时",
+    "Time": "22:20",
+    "Url": "https://www.v2ex.com/"
+  }
+]
+    Key: 微博热搜
+    Value: []
+    Key: IT之家
+    Value: [
+  {
+    "Title": "IT之家 2025 春季招聘（可远程）",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/823/017.htm"
+  },
+  {
+    "Title": "全球最大直径，我国“强基号”隧道掘进机下线",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/895.htm"
+  },
+  {
+    "Title": "CDPR：《赛博朋克 2077》续作“猎户座计划”已进入开发阶段",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/893.htm"
+  },
+  {
+    "Title": "芒果 TV 宣布调整会员同时使用设备数：新会员降至 1 台",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/892.htm"
+  }
+]
+    Key: 知乎热榜
+    Value: []
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowLoaded - 2025-03-26 22:20:48 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: V2EX热门
+    Value: [
+  {
+    "Title": "获取V2EX数据失败: 操作超时",
+    "Time": "22:20",
+    "Url": "https://www.v2ex.com/"
+  }
+]
+    Key: 微博热搜
+    Value: []
+    Key: IT之家
+    Value: [
+  {
+    "Title": "IT之家 2025 春季招聘（可远程）",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/823/017.htm"
+  },
+  {
+    "Title": "全球最大直径，我国“强基号”隧道掘进机下线",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/895.htm"
+  },
+  {
+    "Title": "CDPR：《赛博朋克 2077》续作“猎户座计划”已进入开发阶段",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/893.htm"
+  },
+  {
+    "Title": "芒果 TV 宣布调整会员同时使用设备数：新会员降至 1 台",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/892.htm"
+  }
+]
+    Key: 知乎热榜
+    Value: []
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+2025-03-26 22:20:48.882 - 开始添加点击事件处理
+2025-03-26 22:20:48.883 - 找到ItemsControl: column1TitleItemsControl
+2025-03-26 22:20:48.883 - 在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column2TitleItemsControl
+2025-03-26 22:20:48.883 - 在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column3TitleItemsControl
+2025-03-26 22:20:48.883 - 在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column4TitleItemsControl
+2025-03-26 22:20:48.883 - 在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column5TitleItemsControl
+2025-03-26 22:20:48.883 - 在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column6TitleItemsControl
+2025-03-26 22:20:48.883 - 在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column7TitleItemsControl
+2025-03-26 22:20:48.883 - 在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column8TitleItemsControl
+2025-03-26 22:20:48.883 - 在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.883 - 找到ItemsControl: column9TitleItemsControl
+2025-03-26 22:20:48.884 - 在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.922 - 延迟执行点击事件绑定
+2025-03-26 22:20:48.922 - 延迟执行：在column1TitleItemsControl中找到 1 个NewsItemBorder
+2025-03-26 22:20:48.922 - 延迟执行：在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column3TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:20:48.923 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
+============== OnButtonClicked_CloseButton - 2025-03-26 22:21:03 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: V2EX热门
+    Value: [
+  {
+    "Title": "获取V2EX数据失败: 操作超时",
+    "Time": "22:20",
+    "Url": "https://www.v2ex.com/"
+  }
+]
+    Key: 微博热搜
+    Value: []
+    Key: IT之家
+    Value: [
+  {
+    "Title": "IT之家 2025 春季招聘（可远程）",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/823/017.htm"
+  },
+  {
+    "Title": "全球最大直径，我国“强基号”隧道掘进机下线",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/895.htm"
+  },
+  {
+    "Title": "CDPR：《赛博朋克 2077》续作“猎户座计划”已进入开发阶段",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/893.htm"
+  },
+  {
+    "Title": "芒果 TV 宣布调整会员同时使用设备数：新会员降至 1 台",
+    "Time": "22:20",
+    "Url": "https://www.ithome.com/0/840/892.htm"
+  }
+]
+    Key: 知乎热榜
+    Value: []
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowCreated - 2025-03-26 22:24:05 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: V2EX热门
+    Value: [
+  {
+    "Title": "从V2EX获取数据失败，最近热门话题：程序员应该如何保持技术更新",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981998"
+  },
+  {
+    "Title": "大家现在都在用什么笔记软件？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981487"
+  },
+  {
+    "Title": "35岁危机是真实存在的吗？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/982011"
+  },
+  {
+    "Title": "2024年的技术选型应该如何抉择？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981876"
+  }
+]
+    Key: 微博热搜
+    Value: [
+  {
+    "Title": "傅云夕女儿 亲生",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E5%82%85%E4%BA%91%E5%A4%95%E5%A5%B3%E5%84%BF+%E4%BA%B2%E7%94%9F"
+  },
+  {
+    "Title": "晒工资被开除山姆试吃员签保密协议",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E6%99%92%E5%B7%A5%E8%B5%84%E8%A2%AB%E5%BC%80%E9%99%A4%E5%B1%B1%E5%A7%86%E8%AF%95%E5%90%83%E5%91%98%E7%AD%BE%E4%BF%9D%E5%AF%86%E5%8D%8F%E8%AE%AE"
+  },
+  {
+    "Title": "发电机变身高颜值花朵形状",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E5%8F%91%E7%94%B5%E6%9C%BA%E5%8F%98%E8%BA%AB%E9%AB%98%E9%A2%9C%E5%80%BC%E8%8A%B1%E6%9C%B5%E5%BD%A2%E7%8A%B6"
+  }
+]
+    Key: IT之家
+    Value: [
+  {
+    "Title": "苹果 iOS 19 设计图泄露",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/747.htm"
+  },
+  {
+    "Title": "宇树科技回应已盈利至少 5 年：属实",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/791.htm"
+  },
+  {
+    "Title": "IT之家 2025 春季招聘（可远程）",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/823/017.htm"
+  },
+  {
+    "Title": "全球最大直径，我国“强基号”隧道掘进机下线",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/895.htm"
+  }
+]
+    Key: 知乎热榜
+    Value: [
+  {
+    "Title": "小鹿妈妈公司因「坐牢式上班」被立案，员工全天禁止用手机、出大门，如何看待这一管理方式？暴露出哪些问题？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15750245866"
+  },
+  {
+    "Title": "若父母坚持快乐教育，完全放弃辅导班和兴趣班，孩子在成年后会不会怨恨父母给了自己一个没有竞争力的童年?",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15300447107"
+  },
+  {
+    "Title": "山姆试吃员晒工资条被开除，公司回应「双方签了保密协议，薪资发放符合规定」，怎样从法律角度解读？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15750330696"
+  },
+  {
+    "Title": "为什么电视销量在欧洲增长而在中国却呈现出了下跌？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/14534425208"
+  }
+]
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+============== OnWindowLoaded - 2025-03-26 22:24:06 ==============
+Key: newsData
+Value (Dictionary): Count = 4
+  Dictionary Contents:
+    Key: V2EX热门
+    Value: [
+  {
+    "Title": "从V2EX获取数据失败，最近热门话题：程序员应该如何保持技术更新",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981998"
+  },
+  {
+    "Title": "大家现在都在用什么笔记软件？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981487"
+  },
+  {
+    "Title": "35岁危机是真实存在的吗？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/982011"
+  },
+  {
+    "Title": "2024年的技术选型应该如何抉择？",
+    "Time": "22:24",
+    "Url": "https://www.v2ex.com/t/981876"
+  }
+]
+    Key: 微博热搜
+    Value: [
+  {
+    "Title": "傅云夕女儿 亲生",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E5%82%85%E4%BA%91%E5%A4%95%E5%A5%B3%E5%84%BF+%E4%BA%B2%E7%94%9F"
+  },
+  {
+    "Title": "晒工资被开除山姆试吃员签保密协议",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E6%99%92%E5%B7%A5%E8%B5%84%E8%A2%AB%E5%BC%80%E9%99%A4%E5%B1%B1%E5%A7%86%E8%AF%95%E5%90%83%E5%91%98%E7%AD%BE%E4%BF%9D%E5%AF%86%E5%8D%8F%E8%AE%AE"
+  },
+  {
+    "Title": "发电机变身高颜值花朵形状",
+    "Time": "22:24",
+    "Url": "https://s.weibo.com/weibo?q=%E5%8F%91%E7%94%B5%E6%9C%BA%E5%8F%98%E8%BA%AB%E9%AB%98%E9%A2%9C%E5%80%BC%E8%8A%B1%E6%9C%B5%E5%BD%A2%E7%8A%B6"
+  }
+]
+    Key: IT之家
+    Value: [
+  {
+    "Title": "苹果 iOS 19 设计图泄露",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/747.htm"
+  },
+  {
+    "Title": "宇树科技回应已盈利至少 5 年：属实",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/791.htm"
+  },
+  {
+    "Title": "IT之家 2025 春季招聘（可远程）",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/823/017.htm"
+  },
+  {
+    "Title": "全球最大直径，我国“强基号”隧道掘进机下线",
+    "Time": "22:24",
+    "Url": "https://www.ithome.com/0/840/895.htm"
+  }
+]
+    Key: 知乎热榜
+    Value: [
+  {
+    "Title": "小鹿妈妈公司因「坐牢式上班」被立案，员工全天禁止用手机、出大门，如何看待这一管理方式？暴露出哪些问题？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15750245866"
+  },
+  {
+    "Title": "若父母坚持快乐教育，完全放弃辅导班和兴趣班，孩子在成年后会不会怨恨父母给了自己一个没有竞争力的童年?",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15300447107"
+  },
+  {
+    "Title": "山姆试吃员晒工资条被开除，公司回应「双方签了保密协议，薪资发放符合规定」，怎样从法律角度解读？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/15750330696"
+  },
+  {
+    "Title": "为什么电视销量在欧洲增长而在中国却呈现出了下跌？",
+    "Time": "22:24",
+    "Url": "https://www.zhihu.com/question/14534425208"
+  }
+]
+
+Key: currentCategory
+Value (string): hot
+
+Key: isLoading
+Value (bool): False
+
+======================================================
+
+2025-03-26 22:24:06.031 - 开始添加点击事件处理
+2025-03-26 22:24:06.031 - 找到ItemsControl: column1TitleItemsControl
+2025-03-26 22:24:06.031 - 在column1TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column2TitleItemsControl
+2025-03-26 22:24:06.031 - 在column2TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column3TitleItemsControl
+2025-03-26 22:24:06.031 - 在column3TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column4TitleItemsControl
+2025-03-26 22:24:06.031 - 在column4TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column5TitleItemsControl
+2025-03-26 22:24:06.031 - 在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column6TitleItemsControl
+2025-03-26 22:24:06.031 - 在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.031 - 找到ItemsControl: column7TitleItemsControl
+2025-03-26 22:24:06.031 - 在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.032 - 找到ItemsControl: column8TitleItemsControl
+2025-03-26 22:24:06.032 - 在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.032 - 找到ItemsControl: column9TitleItemsControl
+2025-03-26 22:24:06.032 - 在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.070 - 延迟执行点击事件绑定
+2025-03-26 22:24:06.071 - 延迟执行：在column1TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column2TitleItemsControl中找到 3 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column3TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column4TitleItemsControl中找到 4 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column5TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column6TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column7TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column8TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:06.071 - 延迟执行：在column9TitleItemsControl中找到 0 个NewsItemBorder
+2025-03-26 22:24:23.267 - 延迟绑定的Border被点击
+2025-03-26 22:24:23.282 - URL已打开: https://www.v2ex.com/t/981998
