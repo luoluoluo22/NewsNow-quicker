@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using HtmlAgilityPack;
 using System.IO;
+using System.Windows.Threading;
 
 // NewsNow Quicker版本 - C#代码文件
 
@@ -38,8 +39,27 @@ class NewsSource
 public class NewsNow
 {
     private static readonly HttpClient client = new HttpClient();
-    private static readonly string LogPath = @"F:\vscodeNotes\03-project\newsnow\newsnow_log.txt";
+    private static readonly string LogPath = @"F:\vscodeNotes\03-project\NewsNow-quicker\newsnow_log.txt";
     
+    // 辅助方法：查找视觉树中的子元素
+    private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent) where T : DependencyObject
+    {
+        var count = VisualTreeHelper.GetChildrenCount(parent);
+        for (var i = 0; i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child != null && child is T)
+            {
+                yield return (T)child;
+            }
+
+            foreach (var grandChild in FindVisualChildren<T>(child))
+            {
+                yield return grandChild;
+            }
+        }
+    }
+
     public static void OnWindowCreated(Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
     {
         // 记录初始数据
@@ -448,67 +468,126 @@ public class NewsNow
     // 为所有新闻列表添加点击事件处理
     private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
     {
+        WriteLog("开始添加点击事件处理");
+        
         // 为每个栏目的ItemsControl添加点击事件处理
         for (int i = 1; i <= 9; i++)
         {
             var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
-            AttachItemsControlClickHandler(itemsControl, winContext);
-        }
-    }
-
-    // 为单个ItemsControl添加点击事件处理
-    private static void AttachItemsControlClickHandler(ItemsControl itemsControl, ICustomWindowContext winContext)
-    {
-        if (itemsControl == null) return;
-        
-        // 使用事件委托方式为ItemsControl添加事件处理
-        // 因为ItemsControl的Items是动态生成的，所以需要在容器级别添加事件
-        itemsControl.AddHandler(UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler((sender, e) => 
-        {
-            // 获取点击的元素
-            var originalSource = e.OriginalSource as DependencyObject;
-            if (originalSource == null) return;
-            
-            // 向上查找Border元素
-            Border targetBorder = FindParent<Border>(originalSource);
-            if (targetBorder != null && targetBorder.Name == "NewsItemBorder")
+            if (itemsControl != null)
             {
-                string url = targetBorder.Tag as string;
-                if (!string.IsNullOrEmpty(url))
+                WriteLog("找到ItemsControl: column" + i + "TitleItemsControl");
+                
+                // 直接查找所有的NewsItemBorder
+                var borders = FindVisualChildren<Border>(itemsControl)
+                    .Where(b => b.Name == "NewsItemBorder")
+                    .ToList();
+                
+                WriteLog(string.Format("在column{0}TitleItemsControl中找到 {1} 个NewsItemBorder", i, borders.Count));
+
+                foreach (var border in borders)
                 {
-                    // 打开URL
-                    try
+                    // 为每个Border添加点击事件
+                    border.MouseLeftButtonDown += (s, args) =>
                     {
-                        if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                        WriteLog("Border被点击");
+                        
+                        var clickedBorder = s as Border;
+                        if (clickedBorder != null)
                         {
-                            url = "https://" + url;
+                            WriteLog("Border不为null");
+                            if (clickedBorder.Tag != null)
+                            {
+                                string url = clickedBorder.Tag.ToString();
+                                WriteLog("准备打开URL: " + url);
+                                
+                                // 使用系统默认浏览器打开URL
+                                try
+                                {
+                                    System.Diagnostics.Process.Start(url);
+                                    WriteLog("URL已打开: " + url);
+                                }
+                                catch (Exception ex)
+                                {
+                                    WriteLog("打开链接失败: " + ex.Message + "\nURL: " + url);
+                                    MessageBox.Show("打开链接失败: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
+                            else
+                            {
+                                WriteLog("Border的Tag为null");
+                            }
                         }
-                        System.Diagnostics.Process.Start(url);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("无法打开链接: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                        else
+                        {
+                            WriteLog("无法将sender转换为Border");
+                        }
+                    };
                 }
             }
-        }));
+            else
+            {
+                WriteLog("未找到ItemsControl: column" + i + "TitleItemsControl");
+            }
+        }
+
+        // 添加一个定时器，在窗口加载后延迟执行一次点击事件绑定
+        Dispatcher.CurrentDispatcher.BeginInvoke(
+            new Action(() => 
+            {
+                WriteLog("延迟执行点击事件绑定");
+                for (int i = 1; i <= 9; i++)
+                {
+                    var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
+                    if (itemsControl != null)
+                    {
+                        var borders = FindVisualChildren<Border>(itemsControl)
+                            .Where(b => b.Name == "NewsItemBorder")
+                            .ToList();
+                        
+                        WriteLog(string.Format("延迟执行：在column{0}TitleItemsControl中找到 {1} 个NewsItemBorder", i, borders.Count));
+
+                        foreach (var border in borders)
+                        {
+                            border.MouseLeftButtonDown += (s, args) =>
+                            {
+                                WriteLog("延迟绑定的Border被点击");
+                                var clickedBorder = s as Border;
+                                if (clickedBorder != null && clickedBorder.Tag != null)
+                                {
+                                    string url = clickedBorder.Tag.ToString();
+                                    try
+                                    {
+                                        System.Diagnostics.Process.Start(url);
+                                        WriteLog("URL已打开: " + url);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteLog("打开链接失败: " + ex.Message + "\nURL: " + url);
+                                        MessageBox.Show("打开链接失败: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+                            };
+                        }
+                    }
+                }
+            }),
+            DispatcherPriority.Loaded
+        );
     }
 
-    // 查找指定类型的父元素
-    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    // 写入日志的辅助方法
+    private static void WriteLog(string message)
     {
-        // 获取父元素
-        DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-        
-        // 如果找不到父元素，返回null
-        if (parentObject == null) return null;
-        
-        // 如果父元素是我们要找的类型，返回它
-        T parent = parentObject as T;
-        if (parent != null) return parent;
-        
-        // 否则，继续向上查找
-        return FindParent<T>(parentObject);
+        try
+        {
+            string logMessage = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " - " + message + "\r\n";
+            File.AppendAllText(LogPath, logMessage);
+        }
+        catch
+        {
+            // 忽略日志写入错误
+        }
     }
 
     // 设置窗口拖动
