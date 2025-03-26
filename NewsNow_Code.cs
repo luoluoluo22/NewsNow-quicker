@@ -330,18 +330,34 @@ public class NewsNow
                     debugInfo.AppendLine("- " + key + ": " + description);
                 }
 
+                // 先隐藏所有栏目
+                for (int i = 1; i <= 9; i++)
+                {
+                    var columnGrid = win.FindName("Column" + i + "Grid") as Grid;
+                    if (columnGrid != null)
+                    {
+                        columnGrid.Visibility = Visibility.Collapsed;
+                    }
+                }
+
                 // 动态处理每个栏目
                 var columnKeys = newsData.Keys.ToList();
-                for (int i = 0; i < columnKeys.Count && i < 3; i++)
+                for (int i = 0; i < columnKeys.Count && i < 9; i++)
                 {
                     string columnKey = columnKeys[i];
-                    // 根据栏目标题查找对应的ItemsControl
+                    // 获取对应的Grid和ItemsControl
+                    var columnGrid = win.FindName("Column" + (i + 1) + "Grid") as Grid;
                     var itemsControl = win.FindName("column" + (i + 1) + "TitleItemsControl") as ItemsControl;
-                    if (itemsControl != null && newsData.ContainsKey(columnKey))
+                    
+                    if (itemsControl != null && columnGrid != null && newsData.ContainsKey(columnKey))
                     {
                         var columnData = newsData[columnKey];
                         if (columnData is System.Collections.IEnumerable)
                         {
+                            // 显示栏目
+                            columnGrid.Visibility = Visibility.Visible;
+                            
+                            // 设置数据源
                             itemsControl.ItemsSource = (System.Collections.IEnumerable)columnData;
                             
                             string typeName = "null";
@@ -433,7 +449,7 @@ public class NewsNow
     private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
     {
         // 为每个栏目的ItemsControl添加点击事件处理
-        for (int i = 1; i <= 3; i++)
+        for (int i = 1; i <= 9; i++)
         {
             var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
             AttachItemsControlClickHandler(itemsControl, winContext);
@@ -542,13 +558,12 @@ public class NewsNow
             var columnKeys = newsData.Keys.ToList();
 
             // 更新栏目标题
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 9; i++)
             {
                 var titleBlock = win.FindName("Column" + i + "Title") as TextBlock;
                 if (titleBlock != null && i <= columnKeys.Count)
                 {
                     string columnKey = columnKeys[i - 1];
-                    // 将键名转换为更友好的显示格式
                     string displayTitle = FormatColumnTitle(columnKey);
                     titleBlock.Text = displayTitle;
                 }

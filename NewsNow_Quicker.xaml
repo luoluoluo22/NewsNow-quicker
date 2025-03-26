@@ -159,65 +159,110 @@
     
     <!-- 主要内容区域 -->
     <Grid Grid.Row="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      
-      <!-- 第一栏 -->
-      <Grid Grid.Column="0" Margin="25,25,15,25">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!-- 标题 -->
-        <TextBlock x:Name="Column1Title" Text="栏目一" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
-        
-        <!-- 内容列表 -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="column1TitleItemsControl" 
-                      ItemTemplate="{StaticResource NewsItemTemplate}">
-          </ItemsControl>
-        </ScrollViewer>
-      </Grid>
-      
-      <!-- 第二栏 -->
-      <Grid Grid.Column="1" Margin="15,25,15,25">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!-- 标题 -->
-        <TextBlock x:Name="Column2Title" Text="栏目二" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
-        
-        <!-- 内容列表 -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="column2TitleItemsControl"
-                      ItemTemplate="{StaticResource NewsItemTemplate}">
-          </ItemsControl>
-        </ScrollViewer>
-      </Grid>
-      
-      <!-- 第三栏 -->
-      <Grid Grid.Column="2" Margin="15,25,25,25">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!-- 标题 -->
-        <TextBlock x:Name="Column3Title" Text="栏目三" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
-        
-        <!-- 内容列表 -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="column3TitleItemsControl"
-                      ItemTemplate="{StaticResource NewsItemTemplate}">
-          </ItemsControl>
-        </ScrollViewer>
-      </Grid>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="25">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          
+          <!-- 第1栏 -->
+          <Grid x:Name="Column1Grid" Grid.Row="0" Grid.Column="0" Visibility="Collapsed" Margin="0,0,15,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column1Title" Text="栏目一" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column1TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+          
+          <!-- 第2栏 -->
+          <Grid x:Name="Column2Grid" Grid.Row="0" Grid.Column="1" Visibility="Collapsed" Margin="15,0,15,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column2Title" Text="栏目二" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column2TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+          
+          <!-- 第3栏 -->
+          <Grid x:Name="Column3Grid" Grid.Row="0" Grid.Column="2" Visibility="Collapsed" Margin="15,0,0,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column3Title" Text="栏目三" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column3TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第4栏 -->
+          <Grid x:Name="Column4Grid" Grid.Row="1" Grid.Column="0" Visibility="Collapsed" Margin="0,0,15,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column4Title" Text="栏目四" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column4TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第5栏 -->
+          <Grid x:Name="Column5Grid" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Margin="15,0,15,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column5Title" Text="栏目五" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column5TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第6栏 -->
+          <Grid x:Name="Column6Grid" Grid.Row="1" Grid.Column="2" Visibility="Collapsed" Margin="15,0,0,30">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column6Title" Text="栏目六" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column6TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第7栏 -->
+          <Grid x:Name="Column7Grid" Grid.Row="2" Grid.Column="0" Visibility="Collapsed" Margin="0,0,15,0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column7Title" Text="栏目七" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column7TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第8栏 -->
+          <Grid x:Name="Column8Grid" Grid.Row="2" Grid.Column="1" Visibility="Collapsed" Margin="15,0,15,0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column8Title" Text="栏目八" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column8TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+
+          <!-- 第9栏 -->
+          <Grid x:Name="Column9Grid" Grid.Row="2" Grid.Column="2" Visibility="Collapsed" Margin="15,0,0,0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="Column9Title" Text="栏目九" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+            <ItemsControl x:Name="column9TitleItemsControl" Grid.Row="1" ItemTemplate="{StaticResource NewsItemTemplate}"/>
+          </Grid>
+        </Grid>
+      </ScrollViewer>
     </Grid>
     
     <!-- 底部调试区域 -->
