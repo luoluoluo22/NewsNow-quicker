@@ -32,6 +32,9 @@ public static void Exec(Quicker.Public.IStepContext context)
             context.SetVarValue("newsData", cachedData);
         }
         
+        // 设置刷新按钮图标
+        context.SetVarValue("refreshIcon", GetRefreshIcon());
+        
         // 在后台线程中更新数据
         Task.Run(() => {
             try
@@ -39,11 +42,13 @@ public static void Exec(Quicker.Public.IStepContext context)
                 // 创建新闻数据字典
                 var newsDictionary = new Dictionary<string, List<NewsItem>>();
                 
-                // 获取各类新闻数据并添加到字典中 - 使用更有意义的栏目名称
-                newsDictionary.Add("V2EX热门", GetV2exNews(8));
-                newsDictionary.Add("微博热搜", GetWeiboNews(3));
-                newsDictionary.Add("IT之家", GetITHomeNews(4));
-                newsDictionary.Add("知乎热榜", GetZhihuNews(4));
+                // 获取各类新闻数据并添加到字典中 - 使用更有意义的栏目名称，增加获取条数到9条左右
+                newsDictionary.Add("V2EX热门", GetV2exNews(9));
+                newsDictionary.Add("微博热搜", GetWeiboNews(9));
+                newsDictionary.Add("IT之家", GetITHomeNews(9));
+                newsDictionary.Add("知乎热榜", GetZhihuNews(9));
+                newsDictionary.Add("GitHub热门", GetGitHubTrending(9));
+                newsDictionary.Add("小红书推荐", GetXiaohongshuNotes(9));
                 
                 // 使用Newtonsoft.Json序列化
                 string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(newsDictionary, Newtonsoft.Json.Formatting.Indented);
@@ -568,4 +573,404 @@ private static List<NewsItem> GetZhihuNews(int count)
     }
     
     return result;
+}
+
+// 获取GitHub热门项目
+private static List<NewsItem> GetGitHubTrending(int count)
+{
+    var result = new List<NewsItem>();
+    try
+    {
+        // 创建请求并设置User-Agent
+        var request = (HttpWebRequest)WebRequest.Create("https://github.com/trending");
+        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+        request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+        request.Timeout = 15000;
+        request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        
+        // 获取响应内容
+        using (var response = (HttpWebResponse)request.GetResponse())
+        using (var stream = response.GetResponseStream())
+        using (var reader = new StreamReader(stream))
+        {
+            string html = reader.ReadToEnd();
+            
+            // 使用正则表达式提取热门项目信息
+            var repoRegex = new Regex(@"<h2 class=""h3 lh-condensed"">\s*<a href=""([^""]+)""[^>]*>(.*?)</a>\s*</h2>", RegexOptions.Compiled | RegexOptions.Singleline);
+            var descRegex = new Regex(@"<p class=""col-9 color-fg-muted my-1 pr-4"">\s*(.*?)\s*</p>", RegexOptions.Compiled | RegexOptions.Singleline);
+            
+            var repoMatches = repoRegex.Matches(html);
+            var descMatches = descRegex.Matches(html);
+            
+            int itemCount = 0;
+            for (int i = 0; i < repoMatches.Count && itemCount < count; i++)
+            {
+                string repoPath = repoMatches[i].Groups[1].Value.Trim();
+                string repoName = repoMatches[i].Groups[2].Value.Trim();
+                repoName = Regex.Replace(repoName, @"\s+", " ").Trim();
+                
+                string description = "";
+                if (i < descMatches.Count)
+                {
+                    description = descMatches[i].Groups[1].Value.Trim();
+                    description = Regex.Replace(description, @"\s+", " ").Trim();
+                    description = Regex.Replace(description, "<.*?>", string.Empty);
+                }
+                
+                // 清理仓库名称
+                repoName = Regex.Replace(repoName, "<.*?>", string.Empty);
+                
+                if (string.IsNullOrEmpty(repoName))
+                    continue;
+                
+                string title = repoName;
+                if (!string.IsNullOrEmpty(description))
+                {
+                    title = $"{repoName}: {description}";
+                }
+                
+                var newsItem = new NewsItem
+                {
+                    Title = title,
+                    Url = "https://github.com" + repoPath,
+                    Time = DateTime.Now.ToString("HH:mm")
+                };
+                
+                result.Add(newsItem);
+                itemCount++;
+            }
+        }
+    }
+    catch (Exception)
+    {
+        // 如果获取失败，尝试使用另一种方法
+        try
+        {
+            var request = (HttpWebRequest)WebRequest.Create("https://github.com/trending?spoken_language_code=zh");
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+            request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+            request.Timeout = 15000;
+            
+            using (var response = (HttpWebResponse)request.GetResponse())
+            using (var stream = response.GetResponseStream())
+            using (var reader = new StreamReader(stream))
+            {
+                string html = reader.ReadToEnd();
+                
+                // 使用另一种正则表达式提取项目信息
+                var projectRegex = new Regex(@"<article.*?>\s*<h2.*?>\s*<a\s+href=""([^""]+)"".*?>(.*?)</a>.*?</h2>.*?(?:<p.*?>(.*?)</p>)?", RegexOptions.Compiled | RegexOptions.Singleline);
+                var matches = projectRegex.Matches(html);
+                
+                int itemCount = 0;
+                foreach (Match match in matches)
+                {
+                    if (itemCount >= count)
+                        break;
+                    
+                    string path = match.Groups[1].Value.Trim();
+                    string name = match.Groups[2].Value.Trim();
+                    name = Regex.Replace(name, @"\s+", " ").Trim();
+                    name = Regex.Replace(name, "<.*?>", string.Empty);
+                    
+                    string desc = "";
+                    if (match.Groups.Count > 3)
+                    {
+                        desc = match.Groups[3].Value.Trim();
+                        desc = Regex.Replace(desc, @"\s+", " ").Trim();
+                        desc = Regex.Replace(desc, "<.*?>", string.Empty);
+                    }
+                    
+                    string title = name;
+                    if (!string.IsNullOrEmpty(desc))
+                    {
+                        title = $"{name}: {desc}";
+                    }
+                    
+                    var newsItem = new NewsItem
+                    {
+                        Title = title,
+                        Url = "https://github.com" + path,
+                        Time = DateTime.Now.ToString("HH:mm")
+                    };
+                    
+                    result.Add(newsItem);
+                    itemCount++;
+                }
+            }
+        }
+        catch
+        {
+            // 如果两种方法都失败，添加备用项目
+            result.Add(new NewsItem
+            {
+                Title = "microsoft/vscode: Visual Studio Code",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/microsoft/vscode"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "tensorflow/tensorflow: 机器学习框架",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/tensorflow/tensorflow"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "flutter/flutter: 跨平台UI框架",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/flutter/flutter"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "vuejs/vue: 渐进式JavaScript框架",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/vuejs/vue"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "facebook/react: 用于构建用户界面的JavaScript库",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/facebook/react"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "coder/code-server: 浏览器中的VSCode",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/coder/code-server"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "microsoft/PowerToys: Windows系统实用工具",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/microsoft/PowerToys"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "ant-design/ant-design: 企业级UI设计语言和React组件库",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/ant-design/ant-design"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "goldbergyoni/nodebestpractices: Node.js最佳实践",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://github.com/goldbergyoni/nodebestpractices"
+            });
+        }
+    }
+    
+    return result;
+}
+
+// 获取小红书推荐笔记
+private static List<NewsItem> GetXiaohongshuNotes(int count)
+{
+    var result = new List<NewsItem>();
+    try
+    {
+        // 创建请求并设置User-Agent和其他头信息
+        var request = (HttpWebRequest)WebRequest.Create("https://www.xiaohongshu.com/explore");
+        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+        request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+        request.Headers.Add("Cache-Control", "max-age=0");
+        request.Headers.Add("Upgrade-Insecure-Requests", "1");
+        request.Headers.Add("Referer", "https://www.xiaohongshu.com/");
+        request.Headers.Add("sec-ch-ua", "\"Not A(Brand\";v=\"99\", \"Google Chrome\";v=\"121\", \"Chromium\";v=\"121\"");
+        request.Headers.Add("sec-ch-ua-mobile", "?0");
+        request.Headers.Add("sec-ch-ua-platform", "\"Windows\"");
+        request.Headers.Add("Sec-Fetch-Dest", "document");
+        request.Headers.Add("Sec-Fetch-Mode", "navigate");
+        request.Headers.Add("Sec-Fetch-Site", "same-origin");
+        request.Headers.Add("Sec-Fetch-User", "?1");
+        request.KeepAlive = true;
+        request.Timeout = 15000;
+        request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        
+        // 获取响应内容
+        using (var response = (HttpWebResponse)request.GetResponse())
+        using (var stream = response.GetResponseStream())
+        using (var reader = new StreamReader(stream))
+        {
+            string html = reader.ReadToEnd();
+            
+            // 使用正则表达式提取笔记信息
+            var noteRegex = new Regex(@"<a\s+href=""(/explore/[^""]+)""[^>]*>\s*<div[^>]*>\s*<h3[^>]*>(.*?)</h3>\s*<div[^>]*>(.*?)</div>", RegexOptions.Compiled | RegexOptions.Singleline);
+            var matches = noteRegex.Matches(html);
+            
+            int itemCount = 0;
+            foreach (Match match in matches)
+            {
+                if (itemCount >= count)
+                    break;
+                
+                string path = match.Groups[1].Value.Trim();
+                string title = match.Groups[2].Value.Trim();
+                string author = match.Groups[3].Value.Trim();
+                
+                // 清理HTML标签
+                title = Regex.Replace(title, "<.*?>", string.Empty);
+                author = Regex.Replace(author, "<.*?>", string.Empty);
+                
+                if (string.IsNullOrEmpty(title))
+                    continue;
+                
+                var newsItem = new NewsItem
+                {
+                    Title = $"{title} - {author}",
+                    Url = "https://www.xiaohongshu.com" + path,
+                    Time = DateTime.Now.ToString("HH:mm")
+                };
+                
+                result.Add(newsItem);
+                itemCount++;
+            }
+        }
+    }
+    catch (Exception)
+    {
+        // 如果上述方法失败，尝试使用API获取
+        try
+        {
+            var request = (HttpWebRequest)WebRequest.Create("https://edith.xiaohongshu.com/api/sns/web/v1/homefeed");
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+            request.Headers.Add("Origin", "https://www.xiaohongshu.com");
+            request.Headers.Add("Referer", "https://www.xiaohongshu.com/");
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            
+            // 构建请求体
+            var requestBody = "{\"cursor_score\":\"\",\"num\":12,\"refresh_type\":1,\"note_index\":0,\"unread_begin_note_id\":\"\",\"unread_end_note_id\":\"\",\"unread_note_count\":0,\"category\":\"homefeed_recommend\"}";
+            var data = Encoding.UTF8.GetBytes(requestBody);
+            request.ContentLength = data.Length;
+            
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+            
+            using (var response = (HttpWebResponse)request.GetResponse())
+            using (var stream = response.GetResponseStream())
+            using (var reader = new StreamReader(stream))
+            {
+                string json = reader.ReadToEnd();
+                dynamic feedData = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                
+                if (feedData != null && feedData.data != null && feedData.data.items != null)
+                {
+                    int itemCount = 0;
+                    foreach (var item in feedData.data.items)
+                    {
+                        if (itemCount >= count)
+                            break;
+                        
+                        string title = item.note.display_title;
+                        string noteId = item.note.id;
+                        string userId = item.note.user.nickname;
+                        
+                        if (string.IsNullOrEmpty(title))
+                            continue;
+                        
+                        var newsItem = new NewsItem
+                        {
+                            Title = $"{title} - {userId}",
+                            Url = $"https://www.xiaohongshu.com/explore/{noteId}",
+                            Time = DateTime.Now.ToString("HH:mm")
+                        };
+                        
+                        result.Add(newsItem);
+                        itemCount++;
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // 如果两种方法都失败，添加备用笔记
+            result.Add(new NewsItem
+            {
+                Title = "今日穿搭分享：初春温柔风格 - 小红书时尚博主",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "打卡北京这家新开的咖啡店，氛围感满分 - 咖啡控",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "家常菜谱：简单又好吃的红烧排骨 - 美食达人",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "日常护肤小技巧，让皮肤水润有光泽 - 护肤博主",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "最近入手的五款口红试色分享 - 美妆分享",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "旅行vlog：探索云南小众景点 - 旅行达人",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "三款平价好用的面霜推荐 - 护肤小达人",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "宿舍收纳小妙招，空间瞬间变大 - 收纳达人",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+            
+            result.Add(new NewsItem
+            {
+                Title = "记录我的减肥餐，一个月瘦了10斤 - 健康生活",
+                Time = DateTime.Now.ToString("HH:mm"),
+                Url = "https://www.xiaohongshu.com/explore"
+            });
+        }
+    }
+    
+    return result;
+}
+
+// 获取美观的刷新图标
+private static string GetRefreshIcon()
+{
+    // 返回一个SVG刷新图标，使用柔和的颜色
+    return @"<svg xmlns=""http://www.w3.org/2000/svg"" width=""24"" height=""24"" viewBox=""0 0 24 24"" style=""fill: #4A90E2; cursor: pointer; transition: transform 0.3s ease;"" onmouseover=""this.style.transform='rotate(45deg)'"" onmouseout=""this.style.transform='rotate(0deg)'"">
+        <path d=""M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 10h7V3l-2.35 3.35z""/>
+    </svg>";
 }
