@@ -118,7 +118,6 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     
     <!-- 顶部导航栏 (可拖动区域) -->
@@ -254,16 +253,5 @@
         </Grid>
       </ScrollViewer>
     </Grid>
-    
-    <!-- 底部调试区域 -->
-    <Border Grid.Row="2" Background="#121212" Padding="20,15">
-      <Expander Header="调试信息" Foreground="White" IsExpanded="False">
-        <StackPanel Margin="0,10,0,0">
-          <TextBlock Text="数据项数量：" Foreground="White" FontWeight="Bold"/>
-          <TextBlock x:Name="DebugText" Foreground="#AAAAAA" 
-                   TextWrapping="Wrap" MaxHeight="100"/>
-        </StackPanel>
-      </Expander>
-    </Border>
   </Grid>
 </Window> 

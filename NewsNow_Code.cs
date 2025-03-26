@@ -104,124 +104,10 @@ public class NewsNow
     // 记录数据上下文信息到日志文件
     private static void LogDataContextInfo(IDictionary<string, object> dataContext, string eventName)
     {
+        // 简化的日志记录，移除详细的数据信息记录
         try
         {
-            StringBuilder sb = new StringBuilder();
-            
-            sb.AppendLine("============== " + eventName + " - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ==============");
-            
-            // 记录所有键值对
-            foreach (var key in dataContext.Keys)
-            {
-                sb.AppendLine("Key: " + key);
-                
-                if (dataContext[key] == null)
-                {
-                    sb.AppendLine("Value: null");
-                }
-                else if (dataContext[key] is string)
-                {
-                    sb.AppendLine("Value (string): " + dataContext[key]);
-                }
-                else if (dataContext[key] is bool)
-                {
-                    sb.AppendLine("Value (bool): " + dataContext[key]);
-                }
-                else if (dataContext[key] is Dictionary<string, object>)
-                {
-                    var dict = dataContext[key] as Dictionary<string, object>;
-                    sb.AppendLine("Value (Dictionary): Count = " + dict.Count);
-                    
-                    sb.AppendLine("  Dictionary Contents:");
-                    foreach (var dictKey in dict.Keys)
-                    {
-                        sb.AppendLine("    Key: " + dictKey);
-                        
-                        if (dict[dictKey] == null)
-                        {
-                            sb.AppendLine("    Value: null");
-                        }
-                        else if (dict[dictKey] is IList<object>)
-                        {
-                            var list = dict[dictKey] as IList<object>;
-                            sb.AppendLine("    Value (List): Count = " + list.Count);
-                            
-                            // 记录前3个项目的详细信息
-                            for (int i = 0; i < Math.Min(list.Count, 3); i++)
-                            {
-                                sb.AppendLine("      Item " + i + ":");
-                                if (list[i] is Dictionary<string, object>)
-                                {
-                                    var itemDict = list[i] as Dictionary<string, object>;
-                                    foreach (var itemKey in itemDict.Keys)
-                                    {
-                                        sb.AppendLine("        " + itemKey + ": " + itemDict[itemKey]);
-                                    }
-                                }
-                                else
-                                {
-                                    sb.AppendLine("        Value: " + list[i]);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            sb.AppendLine("    Value: " + dict[dictKey]);
-                        }
-                    }
-                }
-                else if (dataContext[key] is IList<Dictionary<string, object>>)
-                {
-                    var list = dataContext[key] as IList<Dictionary<string, object>>;
-                    sb.AppendLine("Value (List<Dictionary>): Count = " + list.Count);
-                    
-                    // 记录前3个项目的详细信息
-                    for (int i = 0; i < Math.Min(list.Count, 3); i++)
-                    {
-                        sb.AppendLine("  Item " + i + ":");
-                        foreach (var itemKey in list[i].Keys)
-                        {
-                            sb.AppendLine("    " + itemKey + ": " + list[i][itemKey]);
-                        }
-                    }
-                }
-                else
-                {
-                    sb.AppendLine("Value (other): Type = " + dataContext[key].GetType().Name + ", ToString = " + dataContext[key].ToString());
-                    
-                    // 尝试反射获取属性
-                    if (dataContext[key] != null)
-                    {
-                        var properties = dataContext[key].GetType().GetProperties();
-                        if (properties.Length > 0)
-                        {
-                            sb.AppendLine("  Properties:");
-                            foreach (var prop in properties)
-                            {
-                                try
-                                {
-                                    var value = prop.GetValue(dataContext[key]);
-                                    string valueText = "null";
-                                    if (value != null)
-                                    {
-                                        valueText = value.ToString();
-                                    }
-                                    sb.AppendLine("    " + prop.Name + ": " + valueText);
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("    " + prop.Name + ": <error reading value>");
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                sb.AppendLine();
-            }
-            
-            sb.AppendLine("======================================================");
-            sb.AppendLine();
+            string logMessage = "事件: " + eventName + " - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\r\n";
             
             // 创建目录（如果不存在）
             string directory = Path.GetDirectoryName(LogPath);
@@ -231,11 +117,11 @@ public class NewsNow
             }
             
             // 追加到日志文件
-            File.AppendAllText(LogPath, sb.ToString());
+            File.AppendAllText(LogPath, logMessage);
         }
-        catch (Exception ex)
+        catch
         {
-            MessageBox.Show("记录日志时出错: " + ex.Message, "NewsNow", MessageBoxButton.OK, MessageBoxImage.Error);
+            // 忽略日志记录错误
         }
     }
 
@@ -311,26 +197,9 @@ public class NewsNow
     {
         try
         {
-            // 获取调试文本控件
-            var debugText = win.FindName("DebugText") as TextBlock;
-            StringBuilder debugInfo = new StringBuilder();
-            
             if (dataContext.ContainsKey("newsData") && dataContext["newsData"] is Dictionary<string, object>)
             {
                 var newsData = dataContext["newsData"] as Dictionary<string, object>;
-                
-                // 添加调试信息
-                debugInfo.AppendLine("newsData字典包含以下键：");
-                foreach (var key in newsData.Keys)
-                {
-                    string description = "非列表类型";
-                    if (newsData[key] is IList<object>)
-                    {
-                        var list = newsData[key] as IList<object>;
-                        description = list.Count + " 项";
-                    }
-                    debugInfo.AppendLine("- " + key + ": " + description);
-                }
 
                 // 先隐藏所有栏目
                 for (int i = 1; i <= 9; i++)
@@ -361,84 +230,13 @@ public class NewsNow
                             
                             // 设置数据源
                             itemsControl.ItemsSource = (System.Collections.IEnumerable)columnData;
-                            
-                            string typeName = "null";
-                            if (columnData != null)
-                            {
-                                typeName = columnData.GetType().Name;
-                            }
-                            debugInfo.AppendLine(string.Format("已设置{0}数据源，类型：{1}", columnKey, typeName));
-                            
-                            // 显示前三条数据的标题
-                            if (columnData is IList<object>)
-                            {
-                                var columnList = columnData as IList<object>;
-                                if (columnList.Count > 0)
-                                {
-                                    debugInfo.AppendLine(columnKey + "前三条数据：");
-                                    int count = Math.Min(3, columnList.Count);
-                                    for (int j = 0; j < count; j++)
-                                    {
-                                        var item = columnList[j];
-                                        var props = item.GetType().GetProperties();
-                                        var propTitle = props.FirstOrDefault(p => p.Name == "Title");
-                                        string title = "未知标题";
-                                        if (propTitle != null)
-                                        {
-                                            object titleObj = propTitle.GetValue(item);
-                                            if (titleObj != null)
-                                            {
-                                                title = titleObj.ToString();
-                                            }
-                                        }
-                                        debugInfo.AppendLine("  " + (j + 1) + ". " + title);
-                                    }
-                                }
-                            }
                         }
-                        else
-                        {
-                            debugInfo.AppendLine(columnKey + "数据不是可枚举类型，无法设置ItemsSource");
-                        }
-                    }
-                    else
-                    {
-                        debugInfo.AppendLine("未找到column" + (i + 1) + "TitleItemsControl控件或" + columnKey + "数据");
                     }
                 }
             }
             else
             {
-                debugInfo.AppendLine("newsData不存在或不是Dictionary类型");
-                if (dataContext.ContainsKey("newsData"))
-                {
-                    string typeName = "null";
-                    if (dataContext["newsData"] != null)
-                    {
-                        typeName = dataContext["newsData"].GetType().Name;
-                    }
-                    debugInfo.AppendLine("newsData类型：" + typeName);
-                }
-                
-                // 显示所有dataContext中的键
-                debugInfo.AppendLine("\ndataContext中的所有键：");
-                foreach (var key in dataContext.Keys)
-                {
-                    string typeName = "null";
-                    if (dataContext[key] != null)
-                    {
-                        typeName = dataContext[key].GetType().Name;
-                    }
-                    debugInfo.AppendLine("- " + key + ": " + typeName);
-                }
-                
                 MessageBox.Show("newsData不存在或不是Dictionary类型", "数据绑定错误");
-            }
-            
-            // 更新调试文本
-            if (debugText != null)
-            {
-                debugText.Text = debugInfo.ToString();
             }
         }
         catch (Exception ex)
@@ -450,66 +248,42 @@ public class NewsNow
     // 为所有新闻列表添加点击事件处理
     private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
     {
-        WriteLog("开始添加点击事件处理");
-        
         // 为每个栏目的ItemsControl添加点击事件处理
         for (int i = 1; i <= 9; i++)
         {
             var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
             if (itemsControl != null)
             {
-                WriteLog("找到ItemsControl: column" + i + "TitleItemsControl");
-                
                 // 直接查找所有的NewsItemBorder
                 var borders = FindVisualChildren<Border>(itemsControl)
                     .Where(b => b.Name == "NewsItemBorder")
                     .ToList();
-                
-                WriteLog(string.Format("在column{0}TitleItemsControl中找到 {1} 个NewsItemBorder", i, borders.Count));
 
                 foreach (var border in borders)
                 {
                     // 为每个Border添加点击事件
                     border.MouseLeftButtonDown += (s, args) =>
                     {
-                        WriteLog("Border被点击");
-                        
                         var clickedBorder = s as Border;
                         if (clickedBorder != null)
                         {
-                            WriteLog("Border不为null");
                             if (clickedBorder.Tag != null)
                             {
                                 string url = clickedBorder.Tag.ToString();
-                                WriteLog("准备打开URL: " + url);
                                 
                                 // 使用系统默认浏览器打开URL
                                 try
                                 {
                                     System.Diagnostics.Process.Start(url);
-                                    WriteLog("URL已打开: " + url);
                                 }
                                 catch (Exception ex)
                                 {
-                                    WriteLog("打开链接失败: " + ex.Message + "\nURL: " + url);
                                     MessageBox.Show("打开链接失败: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                                 }
                             }
-                            else
-                            {
-                                WriteLog("Border的Tag为null");
-                            }
-                        }
-                        else
-                        {
-                            WriteLog("无法将sender转换为Border");
                         }
                     };
                 }
-            }
-            else
-            {
-                WriteLog("未找到ItemsControl: column" + i + "TitleItemsControl");
             }
         }
 
@@ -517,7 +291,6 @@ public class NewsNow
         Dispatcher.CurrentDispatcher.BeginInvoke(
             new Action(() => 
             {
-                WriteLog("延迟执行点击事件绑定");
                 for (int i = 1; i <= 9; i++)
                 {
                     var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
@@ -526,14 +299,11 @@ public class NewsNow
                         var borders = FindVisualChildren<Border>(itemsControl)
                             .Where(b => b.Name == "NewsItemBorder")
                             .ToList();
-                        
-                        WriteLog(string.Format("延迟执行：在column{0}TitleItemsControl中找到 {1} 个NewsItemBorder", i, borders.Count));
 
                         foreach (var border in borders)
                         {
                             border.MouseLeftButtonDown += (s, args) =>
                             {
-                                WriteLog("延迟绑定的Border被点击");
                                 var clickedBorder = s as Border;
                                 if (clickedBorder != null && clickedBorder.Tag != null)
                                 {
@@ -541,11 +311,9 @@ public class NewsNow
                                     try
                                     {
                                         System.Diagnostics.Process.Start(url);
-                                        WriteLog("URL已打开: " + url);
                                     }
                                     catch (Exception ex)
                                     {
-                                        WriteLog("打开链接失败: " + ex.Message + "\nURL: " + url);
                                         MessageBox.Show("打开链接失败: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                                     }
                                 }
@@ -558,18 +326,10 @@ public class NewsNow
         );
     }
 
-    // 写入日志的辅助方法
+    // 简化的日志写入方法
     private static void WriteLog(string message)
     {
-        try
-        {
-            string logMessage = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " - " + message + "\r\n";
-            File.AppendAllText(LogPath, logMessage);
-        }
-        catch
-        {
-            // 忽略日志写入错误
-        }
+        // 简化实现，不记录详细日志
     }
 
     // 设置窗口拖动
