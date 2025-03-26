@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Input;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Quicker.Public;
@@ -46,6 +47,12 @@ public class NewsNow
         
         // 设置分类按钮的样式
         UpdateCategoryButtonStyle(win, "hot");
+        
+        // 设置窗口拖动
+        SetupWindowDragging(win);
+        
+        // 设置窗口控制按钮
+        SetupWindowControlButtons(win);
     }
 
     public static void OnWindowLoaded(Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
@@ -72,6 +79,9 @@ public class NewsNow
                 MessageBox.Show("已重新设置数据源并记录到日志文件：" + LogPath, "NewsNow");
             };
         }
+
+        // 为新闻项添加点击事件处理
+        AttachClickHandlers(win, winContext);
     }
 
     public static bool OnButtonClicked(string controlName, object controlTag, Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
@@ -458,6 +468,107 @@ public class NewsNow
         catch (Exception ex)
         {
             MessageBox.Show("设置数据源时出错: " + ex.Message, "NewsNow", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    // 为所有新闻列表添加点击事件处理
+    private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
+    {
+        AttachItemsControlClickHandler(win.FindName("V2exItemsControl") as ItemsControl, winContext);
+        AttachItemsControlClickHandler(win.FindName("WeiboItemsControl") as ItemsControl, winContext);
+        AttachItemsControlClickHandler(win.FindName("IthomeItemsControl") as ItemsControl, winContext);
+    }
+
+    // 为单个ItemsControl添加点击事件处理
+    private static void AttachItemsControlClickHandler(ItemsControl itemsControl, ICustomWindowContext winContext)
+    {
+        if (itemsControl == null) return;
+        
+        // 使用事件委托方式为ItemsControl添加事件处理
+        // 因为ItemsControl的Items是动态生成的，所以需要在容器级别添加事件
+        itemsControl.AddHandler(UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler((sender, e) => 
+        {
+            // 获取点击的元素
+            var originalSource = e.OriginalSource as DependencyObject;
+            if (originalSource == null) return;
+            
+            // 向上查找Border元素
+            Border targetBorder = FindParent<Border>(originalSource);
+            if (targetBorder != null && targetBorder.Name == "NewsItemBorder")
+            {
+                string url = targetBorder.Tag as string;
+                if (!string.IsNullOrEmpty(url))
+                {
+                    // 打开URL
+                    try
+                    {
+                        if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                        {
+                            url = "https://" + url;
+                        }
+                        System.Diagnostics.Process.Start(url);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("无法打开链接: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }));
+    }
+
+    // 查找指定类型的父元素
+    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        // 获取父元素
+        DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+        
+        // 如果找不到父元素，返回null
+        if (parentObject == null) return null;
+        
+        // 如果父元素是我们要找的类型，返回它
+        T parent = parentObject as T;
+        if (parent != null) return parent;
+        
+        // 否则，继续向上查找
+        return FindParent<T>(parentObject);
+    }
+
+    // 设置窗口拖动
+    private static void SetupWindowDragging(Window win)
+    {
+        var titleBar = win.FindName("TitleBar") as UIElement;
+        if (titleBar != null)
+        {
+            titleBar.MouseLeftButtonDown += (sender, e) =>
+            {
+                if (e.ButtonState == MouseButtonState.Pressed)
+                {
+                    win.DragMove();
+                }
+            };
+        }
+    }
+
+    // 设置窗口控制按钮
+    private static void SetupWindowControlButtons(Window win)
+    {
+        var closeButton = win.FindName("CloseButton") as Button;
+        if (closeButton != null)
+        {
+            closeButton.Click += (sender, e) =>
+            {
+                win.Close();
+            };
+        }
+        
+        var minimizeButton = win.FindName("MinimizeButton") as Button;
+        if (minimizeButton != null)
+        {
+            minimizeButton.Click += (sender, e) =>
+            {
+                win.WindowState = WindowState.Minimized;
+            };
         }
     }
 
