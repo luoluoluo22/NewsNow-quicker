@@ -60,6 +60,9 @@ public class NewsNow
         // 记录加载后的数据
         LogDataContextInfo(dataContext, "OnWindowLoaded");
         
+        // 设置栏目标题
+        UpdateColumnTitles(win, dataContext);
+        
         // 尝试直接设置控件的ItemsSource
         TrySetItemsDirectly(win, dataContext);
         
@@ -69,6 +72,9 @@ public class NewsNow
         {
             refreshButton.Click += (sender, args) =>
             {
+                // 更新栏目标题
+                UpdateColumnTitles(win, dataContext);
+                
                 // 刷新时尝试再次设置数据
                 TrySetItemsDirectly(win, dataContext);
                 
@@ -323,112 +329,64 @@ public class NewsNow
                     }
                     debugInfo.AppendLine("- " + key + ": " + description);
                 }
-                
-                // 设置V2EX数据
-                var v2exControl = win.FindName("V2exItemsControl") as ItemsControl;
-                if (v2exControl != null && newsData.ContainsKey("v2ex"))
+
+                // 动态处理每个栏目
+                var columnKeys = newsData.Keys.ToList();
+                for (int i = 0; i < columnKeys.Count && i < 3; i++)
                 {
-                    var v2exData = newsData["v2ex"];
-                    if (v2exData is System.Collections.IEnumerable)
+                    string columnKey = columnKeys[i];
+                    // 根据栏目标题查找对应的ItemsControl
+                    var itemsControl = win.FindName("column" + (i + 1) + "TitleItemsControl") as ItemsControl;
+                    if (itemsControl != null && newsData.ContainsKey(columnKey))
                     {
-                        v2exControl.ItemsSource = (System.Collections.IEnumerable)v2exData;
-                        
-                        string typeName = "null";
-                        if (v2exData != null)
+                        var columnData = newsData[columnKey];
+                        if (columnData is System.Collections.IEnumerable)
                         {
-                            typeName = v2exData.GetType().Name;
-                        }
-                        debugInfo.AppendLine("已设置V2EX数据源，类型：" + typeName);
-                        
-                        // 显示前三条数据的标题
-                        if (v2exData is IList<object>)
-                        {
-                            var v2exList = v2exData as IList<object>;
-                            if (v2exList.Count > 0)
+                            itemsControl.ItemsSource = (System.Collections.IEnumerable)columnData;
+                            
+                            string typeName = "null";
+                            if (columnData != null)
                             {
-                                debugInfo.AppendLine("V2EX前三条数据：");
-                                int count = Math.Min(3, v2exList.Count);
-                                for (int i = 0; i < count; i++)
+                                typeName = columnData.GetType().Name;
+                            }
+                            debugInfo.AppendLine(string.Format("已设置{0}数据源，类型：{1}", columnKey, typeName));
+                            
+                            // 显示前三条数据的标题
+                            if (columnData is IList<object>)
+                            {
+                                var columnList = columnData as IList<object>;
+                                if (columnList.Count > 0)
                                 {
-                                    var item = v2exList[i];
-                                    var props = item.GetType().GetProperties();
-                                    var propTitle = props.FirstOrDefault(p => p.Name == "Title");
-                                    string title = "未知标题";
-                                    if (propTitle != null)
+                                    debugInfo.AppendLine(columnKey + "前三条数据：");
+                                    int count = Math.Min(3, columnList.Count);
+                                    for (int j = 0; j < count; j++)
                                     {
-                                        object titleObj = propTitle.GetValue(item);
-                                        if (titleObj != null)
+                                        var item = columnList[j];
+                                        var props = item.GetType().GetProperties();
+                                        var propTitle = props.FirstOrDefault(p => p.Name == "Title");
+                                        string title = "未知标题";
+                                        if (propTitle != null)
                                         {
-                                            title = titleObj.ToString();
+                                            object titleObj = propTitle.GetValue(item);
+                                            if (titleObj != null)
+                                            {
+                                                title = titleObj.ToString();
+                                            }
                                         }
+                                        debugInfo.AppendLine("  " + (j + 1) + ". " + title);
                                     }
-                                    debugInfo.AppendLine("  " + (i+1) + ". " + title);
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        debugInfo.AppendLine("V2EX数据不是可枚举类型，无法设置ItemsSource");
-                    }
-                }
-                else
-                {
-                    debugInfo.AppendLine("未找到V2EX控件或v2ex数据");
-                }
-                
-                // 设置微博数据
-                var weiboControl = win.FindName("WeiboItemsControl") as ItemsControl;
-                if (weiboControl != null && newsData.ContainsKey("weibo"))
-                {
-                    var weiboData = newsData["weibo"];
-                    if (weiboData is System.Collections.IEnumerable)
-                    {
-                        weiboControl.ItemsSource = (System.Collections.IEnumerable)weiboData;
-                        
-                        string countText = "0";
-                        if (weiboData is IList<object>)
+                        else
                         {
-                            var list = weiboData as IList<object>;
-                            countText = list.Count.ToString();
+                            debugInfo.AppendLine(columnKey + "数据不是可枚举类型，无法设置ItemsSource");
                         }
-                        debugInfo.AppendLine("已设置微博数据源，共" + countText + "项");
                     }
                     else
                     {
-                        debugInfo.AppendLine("微博数据不是可枚举类型，无法设置ItemsSource");
+                        debugInfo.AppendLine("未找到column" + (i + 1) + "TitleItemsControl控件或" + columnKey + "数据");
                     }
-                }
-                else
-                {
-                    debugInfo.AppendLine("未找到微博控件或weibo数据");
-                }
-                
-                // 设置IT之家数据
-                var ithomeControl = win.FindName("IthomeItemsControl") as ItemsControl;
-                if (ithomeControl != null && newsData.ContainsKey("ithome"))
-                {
-                    var ithomeData = newsData["ithome"];
-                    if (ithomeData is System.Collections.IEnumerable)
-                    {
-                        ithomeControl.ItemsSource = (System.Collections.IEnumerable)ithomeData;
-                        
-                        string countText = "0";
-                        if (ithomeData is IList<object>)
-                        {
-                            var list = ithomeData as IList<object>;
-                            countText = list.Count.ToString();
-                        }
-                        debugInfo.AppendLine("已设置IT之家数据源，共" + countText + "项");
-                    }
-                    else
-                    {
-                        debugInfo.AppendLine("IT之家数据不是可枚举类型，无法设置ItemsSource");
-                    }
-                }
-                else
-                {
-                    debugInfo.AppendLine("未找到IT之家控件或ithome数据");
                 }
             }
             else
@@ -474,9 +432,12 @@ public class NewsNow
     // 为所有新闻列表添加点击事件处理
     private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
     {
-        AttachItemsControlClickHandler(win.FindName("V2exItemsControl") as ItemsControl, winContext);
-        AttachItemsControlClickHandler(win.FindName("WeiboItemsControl") as ItemsControl, winContext);
-        AttachItemsControlClickHandler(win.FindName("IthomeItemsControl") as ItemsControl, winContext);
+        // 为每个栏目的ItemsControl添加点击事件处理
+        for (int i = 1; i <= 3; i++)
+        {
+            var itemsControl = win.FindName("column" + i + "TitleItemsControl") as ItemsControl;
+            AttachItemsControlClickHandler(itemsControl, winContext);
+        }
     }
 
     // 为单个ItemsControl添加点击事件处理
@@ -570,6 +531,36 @@ public class NewsNow
                 win.WindowState = WindowState.Minimized;
             };
         }
+    }
+
+    // 更新栏目标题
+    private static void UpdateColumnTitles(Window win, IDictionary<string, object> dataContext)
+    {
+        if (dataContext.ContainsKey("newsData") && dataContext["newsData"] is Dictionary<string, object>)
+        {
+            var newsData = dataContext["newsData"] as Dictionary<string, object>;
+            var columnKeys = newsData.Keys.ToList();
+
+            // 更新栏目标题
+            for (int i = 1; i <= 3; i++)
+            {
+                var titleBlock = win.FindName("Column" + i + "Title") as TextBlock;
+                if (titleBlock != null && i <= columnKeys.Count)
+                {
+                    string columnKey = columnKeys[i - 1];
+                    // 将键名转换为更友好的显示格式
+                    string displayTitle = FormatColumnTitle(columnKey);
+                    titleBlock.Text = displayTitle;
+                }
+            }
+        }
+    }
+
+    // 格式化栏目标题
+    private static string FormatColumnTitle(string columnKey)
+    {
+        // 直接返回原始键名
+        return columnKey;
     }
 
     #endregion 

@@ -165,7 +165,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       
-      <!-- V2EX新闻列表 -->
+      <!-- 第一栏 -->
       <Grid Grid.Column="0" Margin="25,25,15,25">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -173,17 +173,17 @@
         </Grid.RowDefinitions>
         
         <!-- 标题 -->
-        <TextBlock Text="V2EX 最新" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+        <TextBlock x:Name="Column1Title" Text="栏目一" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
         
         <!-- 内容列表 -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="V2exItemsControl" 
+          <ItemsControl x:Name="column1TitleItemsControl" 
                       ItemTemplate="{StaticResource NewsItemTemplate}">
           </ItemsControl>
         </ScrollViewer>
       </Grid>
       
-      <!-- 微博热搜列表 -->
+      <!-- 第二栏 -->
       <Grid Grid.Column="1" Margin="15,25,15,25">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -191,17 +191,17 @@
         </Grid.RowDefinitions>
         
         <!-- 标题 -->
-        <TextBlock Text="微博 热搜" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+        <TextBlock x:Name="Column2Title" Text="栏目二" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
         
         <!-- 内容列表 -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="WeiboItemsControl"
+          <ItemsControl x:Name="column2TitleItemsControl"
                       ItemTemplate="{StaticResource NewsItemTemplate}">
           </ItemsControl>
         </ScrollViewer>
       </Grid>
       
-      <!-- IT之家新闻列表 -->
+      <!-- 第三栏 -->
       <Grid Grid.Column="2" Margin="15,25,25,25">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -209,11 +209,11 @@
         </Grid.RowDefinitions>
         
         <!-- 标题 -->
-        <TextBlock Text="IT之家 最新" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+        <TextBlock x:Name="Column3Title" Text="栏目三" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" Margin="0,0,0,20"/>
         
         <!-- 内容列表 -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-          <ItemsControl x:Name="IthomeItemsControl"
+          <ItemsControl x:Name="column3TitleItemsControl"
                       ItemTemplate="{StaticResource NewsItemTemplate}">
           </ItemsControl>
         </ScrollViewer>
