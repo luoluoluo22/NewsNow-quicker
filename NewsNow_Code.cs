@@ -85,26 +85,6 @@ public class NewsNow
         
         // 尝试直接设置控件的ItemsSource
         TrySetItemsDirectly(win, dataContext);
-        
-        // 为刷新按钮添加事件处理
-        var refreshButton = win.FindName("RefreshButton") as Button;
-        if (refreshButton != null)
-        {
-            refreshButton.Click += (sender, args) =>
-            {
-                // 更新栏目标题
-                UpdateColumnTitles(win, dataContext);
-                
-                // 刷新时尝试再次设置数据
-                TrySetItemsDirectly(win, dataContext);
-                
-                // 刷新时记录日志
-                LogDataContextInfo(dataContext, "Refresh_Clicked");
-                
-                // 提示信息
-                MessageBox.Show("已重新设置数据源并记录到日志文件：" + LogPath, "NewsNow");
-            };
-        }
 
         // 为新闻项添加点击事件处理
         AttachClickHandlers(win, winContext);
@@ -112,8 +92,10 @@ public class NewsNow
 
     public static bool OnButtonClicked(string controlName, object controlTag, Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
     {
-        // 记录按钮点击事件
-        LogDataContextInfo(dataContext, "OnButtonClicked_" + controlName);
+        // 只记录按钮点击事件，不包含刷新按钮的特殊处理
+        if (controlName != "RefreshButton") {
+            LogDataContextInfo(dataContext, "OnButtonClicked_" + controlName);
+        }
         return false;
     }
 
