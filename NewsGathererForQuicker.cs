@@ -6,34 +6,103 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
+
+// 缓存文件路径
+private static readonly string CacheFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "QuickerCache", "newsData.json");
 
 // Quicker将会调用的函数
 public static void Exec(Quicker.Public.IStepContext context)
 {
     try
     {
-        // 创建新闻数据字典
-        var newsDictionary = new Dictionary<string, List<NewsItem>>();
+        // 确保缓存目录存在
+        string cacheDirectory = Path.GetDirectoryName(CacheFilePath);
+        if (!Directory.Exists(cacheDirectory))
+        {
+            Directory.CreateDirectory(cacheDirectory);
+        }
+
+        // 尝试从缓存加载数据
+        string cachedData = LoadCachedData();
+        if (!string.IsNullOrEmpty(cachedData))
+        {
+            // 立即将缓存数据设置到Quicker变量
+            context.SetVarValue("newsData", cachedData);
+        }
         
-        // 获取各类新闻数据并添加到字典中 - 使用更有意义的栏目名称
-        newsDictionary.Add("V2EX热门", GetV2exNews(8));
-        newsDictionary.Add("微博热搜", GetWeiboNews(3));
-        newsDictionary.Add("IT之家", GetITHomeNews(4));
-        newsDictionary.Add("知乎热榜", GetZhihuNews(4));
-        
-        // 使用Newtonsoft.Json序列化
-        string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(newsDictionary, Newtonsoft.Json.Formatting.Indented);
-        
-        // 将数据保存到Quicker变量
-        context.SetVarValue("newsData", jsonString);
-        
-        // 移除成功消息弹窗
-        // MessageBox.Show("成功获取新闻数据并保存到变量newsData中");
+        // 在后台线程中更新数据
+        Task.Run(() => {
+            try
+            {
+                // 创建新闻数据字典
+                var newsDictionary = new Dictionary<string, List<NewsItem>>();
+                
+                // 获取各类新闻数据并添加到字典中 - 使用更有意义的栏目名称
+                newsDictionary.Add("V2EX热门", GetV2exNews(8));
+                newsDictionary.Add("微博热搜", GetWeiboNews(3));
+                newsDictionary.Add("IT之家", GetITHomeNews(4));
+                newsDictionary.Add("知乎热榜", GetZhihuNews(4));
+                
+                // 使用Newtonsoft.Json序列化
+                string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(newsDictionary, Newtonsoft.Json.Formatting.Indented);
+                
+                // 将数据保存到Quicker变量
+                context.SetVarValue("newsData", jsonString);
+                
+                // 保存到缓存文件
+                SaveCachedData(jsonString);
+            }
+            catch (Exception ex)
+            {
+                // 显示错误消息
+                MessageBox.Show($"后台更新新闻数据失败: {ex.Message}");
+            }
+        });
     }
     catch (Exception ex)
     {
         // 显示错误消息
         MessageBox.Show($"获取新闻数据失败: {ex.Message}");
+    }
+}
+
+// 从缓存文件加载数据
+private static string LoadCachedData()
+{
+    try
+    {
+        if (File.Exists(CacheFilePath))
+        {
+            // 检查文件修改时间，如果超过12小时则认为缓存过期
+            var fileInfo = new FileInfo(CacheFilePath);
+            if ((DateTime.Now - fileInfo.LastWriteTime).TotalHours > 12)
+            {
+                return null;
+            }
+            
+            return File.ReadAllText(CacheFilePath, Encoding.UTF8);
+        }
+    }
+    catch
+    {
+        // 读取缓存失败，忽略错误
+    }
+    
+    return null;
+}
+
+// 保存数据到缓存文件
+private static void SaveCachedData(string data)
+{
+    try
+    {
+        File.WriteAllText(CacheFilePath, data, Encoding.UTF8);
+    }
+    catch
+    {
+        // 保存缓存失败，忽略错误
     }
 }
 
