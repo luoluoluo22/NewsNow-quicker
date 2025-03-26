@@ -368,6 +368,7 @@ public class NewsNow
                     // 获取对应的Grid和ItemsControl
                     var columnGrid = win.FindName("Column" + (i + 1) + "Grid") as Grid;
                     var itemsControl = win.FindName("column" + (i + 1) + "TitleItemsControl") as ItemsControl;
+                    var columnTitle = win.FindName("Column" + (i + 1) + "Title") as TextBlock;
                     
                     if (itemsControl != null && columnGrid != null && newsData.ContainsKey(columnKey))
                     {
@@ -379,6 +380,42 @@ public class NewsNow
                             
                             // 设置数据源
                             itemsControl.ItemsSource = (System.Collections.IEnumerable)columnData;
+                            
+                            // 设置栏目标题的点击事件
+                            if (columnTitle != null && columnData is IList<object> && ((IList<object>)columnData).Count > 0)
+                            {
+                                var firstItem = ((IList<object>)columnData)[0];
+                                var props = firstItem.GetType().GetProperties();
+                                var propUrl = props.FirstOrDefault(p => p.Name == "Url");
+                                var propTime = props.FirstOrDefault(p => p.Name == "Time");
+                                
+                                if (propUrl != null && propTime != null)
+                                {
+                                    object timeObj = propTime.GetValue(firstItem);
+                                    if (timeObj != null && timeObj.ToString() == "首页")
+                                    {
+                                        // 获取栏目首页URL
+                                        object urlObj = propUrl.GetValue(firstItem);
+                                        if (urlObj != null)
+                                        {
+                                            string url = urlObj.ToString();
+                                            
+                                            // 设置鼠标样式和提示
+                                            columnTitle.Cursor = Cursors.Hand;
+                                            columnTitle.ToolTip = "点击访问" + columnKey + "网站";
+                                            
+                                            // 清除现有事件
+                                            columnTitle.MouseLeftButtonDown -= ColumnTitle_MouseLeftButtonDown;
+                                            
+                                            // 添加点击事件
+                                            columnTitle.Tag = url;
+                                            columnTitle.MouseLeftButtonDown += ColumnTitle_MouseLeftButtonDown;
+                                            
+                                            debugInfo.AppendLine(string.Format("已为栏目[{0}]标题设置点击事件，URL: {1}", columnKey, url));
+                                        }
+                                    }
+                                }
+                            }
                             
                             string typeName = "null";
                             if (columnData != null)
@@ -394,10 +431,29 @@ public class NewsNow
                                 if (columnList.Count > 0)
                                 {
                                     debugInfo.AppendLine(columnKey + "前三条数据：");
-                                    int count = Math.Min(3, columnList.Count);
+                                    int startIndex = 0; // 从第二项开始，跳过栏目标题项
+                                    
+                                    // 检查第一项是否是栏目标题项
+                                    if (columnList.Count > 0)
+                                    {
+                                        var firstItem = columnList[0];
+                                        var props = firstItem.GetType().GetProperties();
+                                        var propTime = props.FirstOrDefault(p => p.Name == "Time");
+                                        
+                                        if (propTime != null)
+                                        {
+                                            object timeObj = propTime.GetValue(firstItem);
+                                            if (timeObj != null && timeObj.ToString() == "首页")
+                                            {
+                                                startIndex = 1; // 跳过首页项
+                                            }
+                                        }
+                                    }
+                                    
+                                    int count = Math.Min(3, columnList.Count - startIndex);
                                     for (int j = 0; j < count; j++)
                                     {
-                                        var item = columnList[j];
+                                        var item = columnList[j + startIndex];
                                         var props = item.GetType().GetProperties();
                                         var propTitle = props.FirstOrDefault(p => p.Name == "Title");
                                         string title = "未知标题";
@@ -465,6 +521,27 @@ public class NewsNow
         }
     }
 
+    // 栏目标题点击事件处理
+    private static void ColumnTitle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is TextBlock titleBlock && titleBlock.Tag != null)
+        {
+            string url = titleBlock.Tag.ToString();
+            WriteLog("准备打开栏目首页URL: " + url);
+            
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+                WriteLog("栏目首页URL已打开: " + url);
+            }
+            catch (Exception ex)
+            {
+                WriteLog("打开栏目首页链接失败: " + ex.Message + "\nURL: " + url);
+                MessageBox.Show("打开链接失败: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+
     // 为所有新闻列表添加点击事件处理
     private static void AttachClickHandlers(Window win, ICustomWindowContext winContext)
     {
@@ -499,7 +576,23 @@ public class NewsNow
                             if (clickedBorder.Tag != null)
                             {
                                 string url = clickedBorder.Tag.ToString();
-                                WriteLog("准备打开URL: " + url);
+                                
+                                // 检查该项是否是栏目标题项（带有"首页"标记）
+                                var panel = clickedBorder.Child as Panel;
+                                if (panel != null)
+                                {
+                                    var timeText = FindVisualChildren<TextBlock>(panel)
+                                        .FirstOrDefault(tb => tb.Name == "TimeText");
+                                    
+                                    if (timeText != null && timeText.Text == "首页")
+                                    {
+                                        WriteLog("点击的是栏目标题项，URL: " + url);
+                                    }
+                                    else
+                                    {
+                                        WriteLog("准备打开URL: " + url);
+                                    }
+                                }
                                 
                                 // 使用系统默认浏览器打开URL
                                 try
