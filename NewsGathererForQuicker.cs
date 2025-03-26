@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 // 缓存文件路径
 private static readonly string CacheFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "QuickerCache", "newsData.json");
@@ -182,7 +183,7 @@ private static List<NewsItem> GetV2exNews(int count)
             }
         }
     }
-    catch (Exception ex)
+    catch (Exception)
     {
         // 如果获取失败，使用v2ex的官方API尝试获取
         try
@@ -218,34 +219,7 @@ private static List<NewsItem> GetV2exNews(int count)
         }
         catch
         {
-            // 如果API也失败，则添加备用的热门话题
-            result.Add(new NewsItem
-            {
-                Title = "从V2EX获取数据失败，最近热门话题：程序员应该如何保持技术更新",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.v2ex.com/t/981998"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "大家现在都在用什么笔记软件？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.v2ex.com/t/981487"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "35岁危机是真实存在的吗？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.v2ex.com/t/982011"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "2024年的技术选型应该如何抉择？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.v2ex.com/t/981876"
-            });
+            // 如果API也失败，返回空列表，不添加备用数据
         }
     }
     
@@ -348,27 +322,7 @@ private static List<NewsItem> GetWeiboNews(int count)
         }
         catch
         {
-            // 如果两种方法都失败，添加备用的热搜条目
-            result.Add(new NewsItem
-            {
-                Title = "央视网络春晚阵容官宣",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://s.weibo.com/weibo?q=央视网络春晚阵容官宣"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "新能源汽车销量创新高",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://s.weibo.com/weibo?q=新能源汽车销量创新高"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "教育部发布最新通知",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://s.weibo.com/weibo?q=教育部发布最新通知"
-            });
+            // 如果两种方法都失败，返回空列表，不添加备用数据
         }
     }
     
@@ -426,27 +380,7 @@ private static List<NewsItem> GetITHomeNews(int count)
     }
     catch (Exception)
     {
-        // 如果获取失败，添加备用信息
-        result.Add(new NewsItem
-        {
-            Title = "IT之家：华为发布新款旗舰手机",
-            Time = DateTime.Now.ToString("HH:mm"),
-            Url = "https://www.ithome.com/"
-        });
-        
-        result.Add(new NewsItem
-        {
-            Title = "IT之家：微软推出新一代Windows更新",
-            Time = DateTime.Now.ToString("HH:mm"),
-            Url = "https://www.ithome.com/"
-        });
-        
-        result.Add(new NewsItem
-        {
-            Title = "IT之家：苹果秋季新品发布会日期确定",
-            Time = DateTime.Now.ToString("HH:mm"),
-            Url = "https://www.ithome.com/"
-        });
+        // 如果获取失败，返回空列表，不添加备用数据
     }
     
     return result;
@@ -550,34 +484,7 @@ private static List<NewsItem> GetZhihuNews(int count)
         }
         catch
         {
-            // 如果两种方法都失败，添加备用的热榜条目
-            result.Add(new NewsItem
-            {
-                Title = "如何看待ChatGPT-4最新版本的能力提升？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.zhihu.com/question/613350000"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "现在买房还是租房更划算？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.zhihu.com/question/618954321"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "年轻人「内卷」的原因是什么？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.zhihu.com/question/542673839"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "高效学习的方法有哪些？",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.zhihu.com/question/271408259"
-            });
+            // 如果两种方法都失败，返回空列表，不添加备用数据
         }
     }
     
@@ -588,196 +495,200 @@ private static List<NewsItem> GetZhihuNews(int count)
 private static List<NewsItem> GetGitHubTrending(int count)
 {
     var result = new List<NewsItem>();
-    try
-    {
-        // 创建请求并设置User-Agent
-        var request = (HttpWebRequest)WebRequest.Create("https://github.com/trending");
-        request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-        request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
-        request.Timeout = 15000;
-        request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-        
-        // 获取响应内容
-        using (var response = (HttpWebResponse)request.GetResponse())
-        using (var stream = response.GetResponseStream())
-        using (var reader = new StreamReader(stream))
-        {
-            string html = reader.ReadToEnd();
-            
-            // 使用正则表达式提取热门项目信息
-            var repoRegex = new Regex(@"<h2 class=""h3 lh-condensed"">\s*<a href=""([^""]+)""[^>]*>(.*?)</a>\s*</h2>", RegexOptions.Compiled | RegexOptions.Singleline);
-            var descRegex = new Regex(@"<p class=""col-9 color-fg-muted my-1 pr-4"">\s*(.*?)\s*</p>", RegexOptions.Compiled | RegexOptions.Singleline);
-            
-            var repoMatches = repoRegex.Matches(html);
-            var descMatches = descRegex.Matches(html);
-            
-            int itemCount = 0;
-            for (int i = 0; i < repoMatches.Count && itemCount < count; i++)
-            {
-                string repoPath = repoMatches[i].Groups[1].Value.Trim();
-                string repoName = repoMatches[i].Groups[2].Value.Trim();
-                repoName = Regex.Replace(repoName, @"\s+", " ").Trim();
-                
-                string description = "";
-                if (i < descMatches.Count)
-                {
-                    description = descMatches[i].Groups[1].Value.Trim();
-                    description = Regex.Replace(description, @"\s+", " ").Trim();
-                    description = Regex.Replace(description, "<.*?>", string.Empty);
-                }
-                
-                // 清理仓库名称
-                repoName = Regex.Replace(repoName, "<.*?>", string.Empty);
-                
-                if (string.IsNullOrEmpty(repoName))
-                    continue;
-                
-                string title = repoName;
-                if (!string.IsNullOrEmpty(description))
-                {
-                    title = $"{repoName}: {description}";
-                }
-                
-                var newsItem = new NewsItem
-                {
-                    Title = title,
-                    Url = "https://github.com" + repoPath,
-                    Time = DateTime.Now.ToString("HH:mm")
-                };
-                
-                result.Add(newsItem);
-                itemCount++;
-            }
-        }
-    }
-    catch (Exception)
-    {
-        // 如果获取失败，尝试使用另一种方法
+    
+    // 定义获取GitHub数据的函数，用于调用后立即处理响应
+    Func<string, List<NewsItem>> FetchAndParse = (url) => {
+        var items = new List<NewsItem>();
         try
         {
-            var request = (HttpWebRequest)WebRequest.Create("https://github.com/trending?spoken_language_code=zh");
+            // 创建请求并设置User-Agent和其他头信息
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
             request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
-            request.Timeout = 15000;
+            request.Headers.Add("Cache-Control", "max-age=0");
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+            request.Headers.Add("Sec-Fetch-Dest", "document");
+            request.Headers.Add("Sec-Fetch-Mode", "navigate");
+            request.Headers.Add("Sec-Fetch-Site", "same-origin");
+            request.Headers.Add("Sec-Fetch-User", "?1");
+            request.KeepAlive = true;
+            request.Timeout = 15000; // 增加超时时间到15秒
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             
+            // 获取响应内容
+            string html = "";
             using (var response = (HttpWebResponse)request.GetResponse())
             using (var stream = response.GetResponseStream())
             using (var reader = new StreamReader(stream))
             {
-                string html = reader.ReadToEnd();
+                html = reader.ReadToEnd();
                 
-                // 使用另一种正则表达式提取项目信息
-                var projectRegex = new Regex(@"<article.*?>\s*<h2.*?>\s*<a\s+href=""([^""]+)"".*?>(.*?)</a>.*?</h2>.*?(?:<p.*?>(.*?)</p>)?", RegexOptions.Compiled | RegexOptions.Singleline);
-                var matches = projectRegex.Matches(html);
+                // 使用更多种类的正则表达式尝试匹配
+                var regexPatterns = new List<Tuple<string, string>> {
+                    // 仓库路径和名称的正则表达式
+                    Tuple.Create(@"<h2 class=""h3 lh-condensed"">\s*<a href=""([^""]+)""[^>]*>(.*?)</a>\s*</h2>", 
+                                @"<p class=""col-9 color-fg-muted my-1 pr-4"">\s*(.*?)\s*</p>"),
+                    
+                    Tuple.Create(@"<h2 class=""f3 color-fg-muted text-normal lh-condensed"">\s*<a [^>]*href=""([^""]+)""[^>]*>(.*?)</a>", 
+                                @"<p class=""color-fg-muted mb-0 pr-4"">\s*(.*?)\s*</p>"),
+                    
+                    Tuple.Create(@"<h1 class=""h3 lh-condensed"">\s*<a href=""([^""]+)""[^>]*>(.*?)</a>\s*</h1>", 
+                                @"<p class=""col-9 color-fg-muted my-1 pr-4"">\s*(.*?)\s*</p>"),
+                    
+                    Tuple.Create(@"<h2 class=""[^""]*"">\s*<a\s+href=""(/[^""]+)""[^>]*>\s*(.*?)\s*</a>\s*</h2>", 
+                                @"<p[^>]*class=""[^""]*color-fg-muted[^""]*""[^>]*>\s*(.*?)\s*</p>"),
+                                
+                    Tuple.Create(@"<article.*?>\s*<h2.*?>\s*<a\s+href=""([^""]+)"".*?>(.*?)</a>.*?</h2>.*?(?:<p.*?>(.*?)</p>)?", "")
+                };
                 
-                int itemCount = 0;
-                foreach (Match match in matches)
+                // 尝试所有正则表达式，直到获得足够的结果
+                foreach (var pattern in regexPatterns)
                 {
-                    if (itemCount >= count)
-                        break;
+                    var repoRegex = new Regex(pattern.Item1, RegexOptions.Compiled | RegexOptions.Singleline);
+                    var repoMatches = repoRegex.Matches(html);
                     
-                    string path = match.Groups[1].Value.Trim();
-                    string name = match.Groups[2].Value.Trim();
-                    name = Regex.Replace(name, @"\s+", " ").Trim();
-                    name = Regex.Replace(name, "<.*?>", string.Empty);
-                    
-                    string desc = "";
-                    if (match.Groups.Count > 3)
+                    if (repoMatches.Count > 0)
                     {
-                        desc = match.Groups[3].Value.Trim();
-                        desc = Regex.Replace(desc, @"\s+", " ").Trim();
-                        desc = Regex.Replace(desc, "<.*?>", string.Empty);
+                        Regex descRegex = null;
+                        MatchCollection descMatches = null;
+                        
+                        if (!string.IsNullOrEmpty(pattern.Item2))
+                        {
+                            descRegex = new Regex(pattern.Item2, RegexOptions.Compiled | RegexOptions.Singleline);
+                            descMatches = descRegex.Matches(html);
+                        }
+                        
+                        int itemCount = 0;
+                        for (int i = 0; i < repoMatches.Count && itemCount < count; i++)
+                        {
+                            string repoPath = repoMatches[i].Groups[1].Value.Trim();
+                            string repoName = repoMatches[i].Groups[2].Value.Trim();
+                            repoName = Regex.Replace(repoName, @"\s+", " ").Trim();
+                            repoName = Regex.Replace(repoName, "<.*?>", string.Empty);
+                            
+                            string description = "";
+                            if (descRegex != null && i < descMatches.Count)
+                            {
+                                description = descMatches[i].Groups[1].Value.Trim();
+                                description = Regex.Replace(description, @"\s+", " ").Trim();
+                                description = Regex.Replace(description, "<.*?>", string.Empty);
+                            }
+                            else if (repoMatches[i].Groups.Count > 3)
+                            {
+                                description = repoMatches[i].Groups[3].Value.Trim();
+                                description = Regex.Replace(description, @"\s+", " ").Trim();
+                                description = Regex.Replace(description, "<.*?>", string.Empty);
+                            }
+                            
+                            if (string.IsNullOrEmpty(repoName))
+                                continue;
+                            
+                            string title = repoName;
+                            if (!string.IsNullOrEmpty(description))
+                            {
+                                title = $"{repoName}: {description}";
+                            }
+                            
+                            var newsItem = new NewsItem
+                            {
+                                Title = title,
+                                Url = "https://github.com" + repoPath,
+                                Time = DateTime.Now.ToString("HH:mm")
+                            };
+                            
+                            items.Add(newsItem);
+                            itemCount++;
+                        }
+                        
+                        if (items.Count >= 3) // 至少找到几个项目就认为成功了
+                        {
+                            break;
+                        }
                     }
+                }
+                
+                // 尝试通用的文章匹配（基于article元素）
+                if (items.Count < 3)
+                {
+                    var articleRegex = new Regex(@"<article[^>]*class=""Box-row""[^>]*>(.*?)</article>", RegexOptions.Compiled | RegexOptions.Singleline);
+                    var articleMatches = articleRegex.Matches(html);
                     
-                    string title = name;
-                    if (!string.IsNullOrEmpty(desc))
+                    if (articleMatches.Count > 0)
                     {
-                        title = $"{name}: {desc}";
+                        items.Clear(); // 清空之前的结果
+                        
+                        var hrefRegex = new Regex(@"<a\s+href=""(/[^""]+)""[^>]*>([^<]+)</a>", RegexOptions.Compiled | RegexOptions.Singleline);
+                        var descRegex = new Regex(@"<p[^>]*class=""[^""]*color-fg-muted[^""]*""[^>]*>([^<]+)</p>", RegexOptions.Compiled | RegexOptions.Singleline);
+                        
+                        int itemCount = 0;
+                        foreach (Match article in articleMatches)
+                        {
+                            if (itemCount >= count)
+                                break;
+                                
+                            string articleContent = article.Groups[1].Value;
+                            var hrefMatch = hrefRegex.Match(articleContent);
+                            var descMatch = descRegex.Match(articleContent);
+                            
+                            if (hrefMatch.Success)
+                            {
+                                string repoPath = hrefMatch.Groups[1].Value.Trim();
+                                string repoName = hrefMatch.Groups[2].Value.Trim();
+                                repoName = Regex.Replace(repoName, @"\s+", " ").Trim();
+                                
+                                string description = "";
+                                if (descMatch.Success)
+                                {
+                                    description = descMatch.Groups[1].Value.Trim();
+                                    description = Regex.Replace(description, @"\s+", " ").Trim();
+                                }
+                                
+                                if (string.IsNullOrEmpty(repoName))
+                                    continue;
+                                    
+                                string title = repoName;
+                                if (!string.IsNullOrEmpty(description))
+                                {
+                                    title = $"{repoName}: {description}";
+                                }
+                                
+                                var newsItem = new NewsItem
+                                {
+                                    Title = title,
+                                    Url = "https://github.com" + repoPath,
+                                    Time = DateTime.Now.ToString("HH:mm")
+                                };
+                                
+                                items.Add(newsItem);
+                                itemCount++;
+                            }
+                        }
                     }
-                    
-                    var newsItem = new NewsItem
-                    {
-                        Title = title,
-                        Url = "https://github.com" + path,
-                        Time = DateTime.Now.ToString("HH:mm")
-                    };
-                    
-                    result.Add(newsItem);
-                    itemCount++;
                 }
             }
+            
+            // 如果尝试所有方法后仍无结果，返回空列表（不读取本地JSON文件）
         }
         catch
         {
-            // 如果两种方法都失败，添加备用项目
-            result.Add(new NewsItem
-            {
-                Title = "microsoft/vscode: Visual Studio Code",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/microsoft/vscode"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "tensorflow/tensorflow: 机器学习框架",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/tensorflow/tensorflow"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "flutter/flutter: 跨平台UI框架",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/flutter/flutter"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "vuejs/vue: 渐进式JavaScript框架",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/vuejs/vue"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "facebook/react: 用于构建用户界面的JavaScript库",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/facebook/react"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "coder/code-server: 浏览器中的VSCode",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/coder/code-server"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "microsoft/PowerToys: Windows系统实用工具",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/microsoft/PowerToys"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "ant-design/ant-design: 企业级UI设计语言和React组件库",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/ant-design/ant-design"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "goldbergyoni/nodebestpractices: Node.js最佳实践",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://github.com/goldbergyoni/nodebestpractices"
-            });
+            // 捕获请求异常，不处理，返回空列表
         }
+        
+        return items;
+    };
+    
+    // 首先尝试获取GitHub Trending数据
+    result = FetchAndParse("https://github.com/trending");
+    
+    // 如果第一次请求失败，尝试中文页面
+    if (result.Count == 0)
+    {
+        result = FetchAndParse("https://github.com/trending?spoken_language_code=zh");
     }
     
-    return result;
+    // 如果所有方法都失败，返回空列表
+    return result.Take(count).ToList();
 }
 
 // 获取小红书推荐笔记
@@ -906,69 +817,7 @@ private static List<NewsItem> GetXiaohongshuNotes(int count)
         }
         catch
         {
-            // 如果两种方法都失败，添加备用笔记
-            result.Add(new NewsItem
-            {
-                Title = "今日穿搭分享：初春温柔风格 - 小红书时尚博主",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "打卡北京这家新开的咖啡店，氛围感满分 - 咖啡控",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "家常菜谱：简单又好吃的红烧排骨 - 美食达人",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "日常护肤小技巧，让皮肤水润有光泽 - 护肤博主",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "最近入手的五款口红试色分享 - 美妆分享",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "旅行vlog：探索云南小众景点 - 旅行达人",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "三款平价好用的面霜推荐 - 护肤小达人",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "宿舍收纳小妙招，空间瞬间变大 - 收纳达人",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
-            
-            result.Add(new NewsItem
-            {
-                Title = "记录我的减肥餐，一个月瘦了10斤 - 健康生活",
-                Time = DateTime.Now.ToString("HH:mm"),
-                Url = "https://www.xiaohongshu.com/explore"
-            });
+            // 如果两种方法都失败，返回空列表，不添加备用数据
         }
     }
     
