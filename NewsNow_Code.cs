@@ -92,6 +92,23 @@ public class NewsNow
 
     public static bool OnButtonClicked(string controlName, object controlTag, Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
     {
+        // 处理订阅按钮点击事件
+        if (controlName == "SubscribeButton")
+        {
+            // 获取输入框中的关键词
+            var queryTextBox = win.FindName("QueryTextBox") as TextBox;
+            if (queryTextBox != null && !string.IsNullOrWhiteSpace(queryTextBox.Text))
+            {
+                // 更新数据上下文中的订阅关键词
+                dataContext["query"] = queryTextBox.Text.Trim();
+                
+
+                
+                // 标记事件已处理
+                return true;
+            }
+        }
+        
         // 只记录按钮点击事件，不包含刷新按钮的特殊处理
         if (controlName != "RefreshButton") {
             LogDataContextInfo(dataContext, "OnButtonClicked_" + controlName);

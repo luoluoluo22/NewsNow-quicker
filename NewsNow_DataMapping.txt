@@ -4,6 +4,9 @@ currentCategory:="hot"
 // 加载状态
 isLoading:=false
 
+// 订阅关键词
+query:="AI"
+
 // newsData字典，包含三个键：v2ex, weibo, ithome，每个键对应一个新闻项列表
 // 示例格式：
 // newsData:={
