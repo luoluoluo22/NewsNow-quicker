@@ -148,7 +148,7 @@
                      Foreground="White" BorderThickness="0" VerticalContentAlignment="Center"
                      Text="{Binding query}" Padding="5,0"/>
             <Button x:Name="SubscribeButton" Content="确定" Style="{StaticResource TitleBarButton}" 
-                    Background="#1976D2" Foreground="White" Width="50" Height="24" Margin="5,0,0,0"/>
+                    Background="#1E293B" Foreground="White" Width="50" Height="30" Margin="4,0,0,0"/>
           </StackPanel>
         </Border>
         

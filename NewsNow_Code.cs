@@ -77,6 +77,22 @@ public class NewsNow
 
     public static void OnWindowLoaded(Window win, IDictionary<string, object> dataContext, ICustomWindowContext winContext)
     {
+        // 初始化订阅关键词输入框
+        if (dataContext.ContainsKey("query"))
+        {
+            var queryTextBox = win.FindName("QueryTextBox") as TextBox;
+            if (queryTextBox != null)
+            {
+                queryTextBox.Text = dataContext["query"].ToString();
+                
+                // 添加文本变更事件处理
+                queryTextBox.TextChanged += (sender, e) =>
+                {
+                    dataContext["query"] = queryTextBox.Text;
+                };
+            }
+        }
+        
         // 记录加载后的数据
         LogDataContextInfo(dataContext, "OnWindowLoaded");
         
